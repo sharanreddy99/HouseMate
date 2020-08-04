@@ -1,0 +1,30 @@
+a.navbar-brand {
+  color: white;
+}
+
+a.navbar-brand:hover {
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.navbar {
+    background-color: #05386B;
+  }
+  
+  .navbar-brand {
+    color: white;
+    background-color:black;
+    border-radius: 10px;
+    padding: 5px;
+  }
+  
+  .navbar-nav {
+    background-color:black;
+    border-radius: 10px;
+  }
+  
+  .fa {
+    color: white;
+  }
+  

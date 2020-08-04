@@ -1,0 +1,7 @@
+@import '../login/login.component.css';
+
+.profile-container {
+    background-color: #8EE4AF;
+    height: 100vh;
+    min-height:100vh;
+}

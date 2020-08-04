@@ -1,0 +1,103 @@
+<div class="div"  [ngClass]="isLoading$? 'd-block': 'd-none'" style="width:100vw;height:100vh; border: 2px solid black;">
+  <app-loading></app-loading>
+</div>
+
+<div class="contasd" [ngClass]="!isLoading$? 'd-block': 'd-none'">
+  <div class="modal-header" style="background-color: #05386B;color: white;">
+    <h4 class="modal-title pull-left ">Add or Remove Stock.</h4>
+    <button type="button" class="close pull-right" (click)="onCancel()" style="color:white;" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body " style="background-color: #5CDB95;color: #05386B;">
+  <div class="login-container p-4">
+    <form autocomplete="off" ngNativeValidate >
+        <div class="input-group mt-2">
+              <div class="input-group-prepend d-block w-100">
+                  <span class="input-group-text">Category</span>
+              </div>
+              <input name="category" [disabled]="true" required type="text" class="form-control w-100" placeholder="Enter Item Category" [(ngModel)]="itemSettings.category">      
+        </div>
+          
+        <div class="input-group mt-2">
+            <div class="input-group-prepend d-block w-100">
+                <span class="input-group-text">Name</span>
+            </div>
+            <input name="name" [disabled]="true" required type="text" class="form-control w-100" placeholder="Enter Item Name" [(ngModel)]="itemSettings.name">      
+        </div>
+        
+        <div class="input-group mt-2">
+            <div class="input-group-prepend d-block w-100">
+                <span class="input-group-text">New Stock Count</span>
+            </div>
+            <input name="newstockcount" required type="number" min="0" class="form-control w-100" placeholder="Enter new stock count" [(ngModel)]="newstockcount">      
+        </div>
+        
+        <div class="row justify-content-center">
+          <div class="col-4 justify-content-center">
+              <h3 class="m-2"><b>OR</b></h3>
+          </div>
+        </div>
+  
+        <div class="input-group mt-2">
+          <div class="input-group-prepend d-block w-100">
+              <span class="input-group-text">New Quantity</span>
+          </div>
+          <input name="newquantity" required type="number" min="0" class="form-control w-100" placeholder="Enter new quantity" [(ngModel)]="newquantity">      
+        </div>
+        
+        <div class="input-group mt-2">
+          <div class="input-group-prepend d-block w-100">
+            <span class="input-group-text">Units</span>
+          </div>
+          <select name="units" class="custom-select w-100" [(ngModel)]="newunits" #selectRef>
+            <option value="choose" selected> Choose the unit</option>
+            <option *ngIf="itemSettings.units=='kg' || itemSettings.units=='gms'" value="kg">Kilo Grams(kg)</option>
+            <option *ngIf="itemSettings.units=='kg' || itemSettings.units=='gms'" value="gms">Grams (gms)</option>
+            <option *ngIf="itemSettings.units=='lit' || itemSettings.units=='ml'" value="lit">Litre (lit)</option>
+            <option *ngIf="itemSettings.units=='lit' || itemSettings.units=='ml'" value="ml">Milli Litres (ml)</option>
+            <option *ngIf="itemSettings.units=='dozen'" value="dozen">Dozen</option>
+            <option *ngIf="itemSettings.units=='units'" value="units">Units</option>
+          </select>
+        </div>
+    
+          <div class="row">
+            <div class="col mt-4">
+                <button type="button" class="btn btn-lg btn-block bluebutton" [disabled]="!newstockcount" (click)="addStock()" ><b>Add Stock</b></button>
+            </div>
+            <div class="col mt-4">
+                <button type="button" class="btn btn-lg btn-block bluebutton" [disabled]="!newstockcount" (click)="removeStock()"><b>Remove Stock</b></button>
+            </div>
+          </div>
+          
+          <div class="row">
+              <div class="col mt-4">
+                  <button type="button" class="btn btn-lg btn-block bluebutton" [disabled]="newquantity==undefined || newunits=='choose'" (click)="addQuantity()"><b>Add Quantity</b></button>
+              </div>
+              <div class="col mt-4">
+                  <button type="button" class="btn btn-lg btn-block bluebutton" [disabled]="newquantity==undefined ||  newunits=='choose'" (click)="removeQuantity()"><b>Remove Quantity</b></button>
+              </div>
+          </div>  
+          
+          <div class="row">
+              <div class="col mt-4">
+                  <button type="button" name="cancel" class="btn btn-lg btn-block bluebutton" (click)="onCancel()"><b>Cancel</b></button>
+              </div>
+          </div>
+      </form>
+    </div>
+  </div>
+
+<ng-template #template2>
+  <div class="modal-header" style="background-color: #05386B;color: white;">
+    <h4 class="modal-title pull-left ">Alert.</h4>
+    <button type="button" class="close pull-right" (click)="closeSecondModal()" style="color:white;" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body " style="background-color: #5CDB95;color: #05386B;">
+  <b>{{secondmodalbody}}</b>
+  </div>
+</ng-template>
+
+</div>

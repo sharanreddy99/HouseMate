@@ -1,0 +1,22 @@
+.complete-about-container {
+    background-color: #8EE4AF;
+    height: 100vh;
+    min-height:100vh;
+} 
+
+.card-link {
+    color: #05386B;
+}
+
+.card-link:hover {
+    color: #04284b;
+}
+
+.card {
+    background-color: #EDF5E1;
+    border-radius: 8px;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}

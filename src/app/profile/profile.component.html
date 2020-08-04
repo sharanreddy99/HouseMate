@@ -1,0 +1,107 @@
+<app-loading [ngClass]="isLoading$ ? 'd-block' : 'd-none'"></app-loading>
+
+<div class="profile-container" [ngClass]="!isLoading$ ? 'd-block' : 'd-none'">
+    <app-navbar></app-navbar>
+    <div class="p-4">
+        <form autocomplete="off" ngNativeValidate>
+            <div class="input-group mt-2">
+                <div class="input-group-prepend d-none d-md-block">
+                    <span class="input-group-text">First Name</span>
+                </div>
+                <input name="profie_fname" type="text" class="form-control" [ngClass]="isFNValid===false ? 'invalid-form-control': null" [disabled]="!isEditClicked" placeholder="Enter First Name" [(ngModel)]="newProfileSettings.fname" >      
+            </div>
+            
+            <div class="input-group mt-2">
+                <div class="input-group-prepend d-none d-md-block">
+                    <span class="input-group-text">Last Name</span>
+                </div>
+                <input name="profie_lname" type="text" class="form-control" [ngClass]="isLNValid===false ? 'invalid-form-control': null" [disabled]="!isEditClicked" placeholder="Enter Last Name" [(ngModel)]="newProfileSettings.lname"> 
+            </div>
+            <div class="input-group mt-2">
+                <div class="input-group-prepend d-none d-md-block">
+                    <span class="input-group-text">Email </span>
+                </div>
+                <input name="profie_email" type="email" [ngClass]="isEmailValid===false ? 'invalid-form-control': null" [disabled]="!isEditClicked || (isOTPSent && isOTPVerified)" class="form-control" placeholder="Enter Email" [(ngModel)]="newProfileSettings.email">
+            </div>
+            <div class="input-group mt-2">
+                <div class="input-group-prepend d-none d-md-block">
+                    <span class="input-group-text">Password </span>
+                </div>
+                <input name="profie_password" type="password" [ngClass]="isPassValid===false ? 'invalid-form-control': null" class="form-control" [disabled]="!isEditClicked" placeholder="Enter Password" (click) = "explainPassword(passRef)" [(ngModel)]="newProfileSettings.password" #passRef>
+            </div>
+            <div class="input-group mt-2">
+                <div class="input-group-prepend d-none d-md-block">
+                    <span class="input-group-text">Confirm Password </span>
+                </div>
+                <input name="profie_confpassword" [ngClass]="isPassValid===false ? 'invalid-form-control': null" type="password" class="form-control" [disabled]="!isEditClicked" (focus) = "confpassRef.setSelectionRange(0, confpassRef.value.length)" placeholder="Enter Password Again" [(ngModel)]="confpass" #confpassRef> 
+            </div>
+            <div class="input-group mt-2">
+                <div class="input-group-prepend d-none d-md-block">
+                    <span class="input-group-text">OTP </span>
+                </div>
+                <input name="profie_otp" type="text" class="form-control" [ngClass]="isOTPVerified===false ? 'invalid-form-control': null" placeholder="Enter OTP" [disabled]="!isOTPSent || (isOTPSent && isOTPVerified) || !isEditClicked" #otp>
+            </div>
+            
+            <div class="row">
+                <div class="col mt-4">
+                    <button type="button" name="profie_sendotp" class="btn btn-lg btn-block bluebutton" (click)="generateOTP()" [disabled]="!isEditClicked || equalObjects() "><b>{{isOTPSent ? 'Regenerate' : 'Generate'}} OTP</b></button>
+                </div>
+                <div class="col mt-4">
+                    <button type="button" name="profie_verifyotp" class="btn btn-lg btn-block bluebutton" [disabled]="!isOTPSent || !isEditClicked" (click)="verifyOTP(otp.value)"><b>Verify OTP</b></button>
+                </div>
+                
+            </div>
+            <div class="row">
+                <div class="col col-md-6 mt-4">
+                    <button type="button" name="profie_edit" class="btn btn-lg btn-block bluebutton" [disabled]="isEditClicked" (click)="onEdit()"><b>Edit</b></button>
+                </div>
+                <div class="col col-md-6 mt-4">
+                    <button type="button" (click)="onProfileEdit()" name="profie_save" class="btn btn-lg btn-block bluebutton" [disabled]="!isOTPSent || !isOTPVerified || !isEditClicked"><b>Save</b></button>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col mt-4">
+                    <button type="button" name="profie_delete" class="btn btn-lg btn-block btn-danger" (click)="openSecondModal()"><b>Delete User</b></button>
+                </div>
+            </div>
+        </form>
+    
+        <ng-template #template>
+            <div class="modal-header" style="background-color: #05386B;color: white;">
+              <h4 class="modal-title pull-left ">Alert.</h4>
+              <button type="button" class="close pull-right" style="color:white;" aria-label="Close" (click)="modalRef.hide()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body " style="background-color: #5CDB95;color: #05386B;">
+              <b>{{modalbody}}</b>
+            </div>
+        </ng-template>
+        
+        <ng-template #template2>
+            <div class="modal-header" style="background-color: #05386B;color: white;">
+              <h4 class="modal-title pull-left ">Delete User</h4>
+              <button type="button" class="close pull-right" style="color:white;" aria-label="Close" (click)="closeSecondModal()">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body " style="background-color: #5CDB95;color: #05386B;">
+              <b>Deleting the user will delete all the data available with the user. Are you sure you want to delete?</b>
+              <div class="row">
+                  <div class="col mt-4">
+                    <b>Enter your email to confirm: <h5 style="color:red;">{{profileSettings.email}}</h5></b>
+                    <input type="text" autocomplete= "off" class="form-control w-100" name="confemail" [(ngModel)]="deleteusertext"> 
+                  </div>
+              </div>
+              <div class="row">
+                  <div class="col mt-4">
+                    <button type="button" class="btn btn-block btn-primary bluebutton" (click)="closeSecondModal()">Cancel</button>
+                  </div>
+                  <div class="col mt-4">
+                    <button type="button" class="btn btn-block btn-danger" (click)="goDelete()" [disabled]="deleteusertext!=profileSettings.email">Confirm</button>
+                  </div>
+              </div>
+            </div>
+        </ng-template>
+    </div>
+</div>

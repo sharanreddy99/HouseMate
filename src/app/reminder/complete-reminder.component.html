@@ -1,0 +1,141 @@
+<div class="div"  [ngClass]="isLoading$? 'd-block': 'd-none'" style="width:100vw;height:100vh; border: 2px solid black;">
+    <app-loading></app-loading>
+</div>
+<app-navbar [ngClass]="!isLoading$? 'd-block': 'd-none'"></app-navbar>
+<div class="container-fluid" [ngClass]="!isLoading$? 'd-block': 'd-none'">
+    
+    <div class="row p-2">
+        <div class="col-12 col-md-6 mt-2 reminder-display-div">
+            <div class="row p-2 alertown mb-2" *ngFor = "let reminder of reminders">
+                <div class="col-10 col-md-11" style="word-wrap: break-word;">
+                    {{reminder.newtitle}}
+                </div>
+                <div class="col-1 float-right">
+                    <i class="fa fa-times" (click)="changePassedReminder(reminder)"></i>
+                    <i class="fa fa-check" (click)="completeAlert(reminder)"></i>
+                </div>
+            </div>
+            <div class="row p-2" style="border-radius:10px;" *ngIf = "reminders.length==0">
+                <div class="col m-5">
+                    <h3><b style="text-shadow: 2px 2px 5px #05486B;">No Reminders Available</b></h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-md-5 ml-md-5 mt-2 reminder-option-div">
+            <form autocomplete="off" ngForm (ngSubmit) = "onAddRemainder()">    
+                <div class="container" style="height:85vh; overflow:scroll;">
+                    <div class="input-group mt-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text d-block">Title</span>
+                        </div>
+                        <input name="title" type="text" [ngClass]="isTitleValid ===false ? 'invalid-form-control': null" class="form-control w-100" placeholder="Reminder Title" [(ngModel)]="reminderSettings.title">
+                    </div>
+                    <div class="input-group mt-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text d-block">Description</span>
+                        </div>
+                        <textarea name="description" class="form-control  w-100" placeholder="Reminder Description(Optional)" row="2" [(ngModel)]="reminderSettings.description"> </textarea>
+                    </div>
+
+                    <div class="input-group mt-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text d-block">Priority</span>
+                        </div>
+                        <select name="priority" class="custom-select w-100" [(ngModel)]="reminderSettings.priority">
+                            <option value="low">Low (Only in App)</option>
+                            <option value="high">High (Reminder through email)</option>
+                        </select>
+                    </div>
+                    <hr>
+                    
+                    <div class="input-group mt-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text w-100">Remind Interval(Days)</span>
+                        </div>
+                        <input name="daysgap" type="number" min="0" [ngClass]="isDaysValid ===false ? 'invalid-form-control': null" class="form-control w-100" placeholder="Days" [(ngModel)]="reminderSettings.daysgap">
+                    </div>
+                    <h5 style="margin-left:45%" class="mt-2">OR</h5>
+                    
+                    <div class="input-group mt-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text w-100">Custom Days</span>
+                        </div>
+                        <div class="row w-100">
+                            <div class="col">
+                                <input name="customdate" type="date" min="{{todaydate}}" [ngClass]="isCustomDaysValid ===false ? 'invalid-form-control': null" class="form-control w-100" #cdateRef>
+                                <button type="button" class="login-button" style="float:right;" (click)= "cdateRef.value && addDate(cdateRef.value)"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mt-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text w-100">Selected Days</span>
+                        </div>
+                        <select class="days-select w-100" multiple="multiple">
+                        </select>
+                    </div>
+                    <hr>
+                    <div class="input-group mt-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text w-100">Remind Interval(Time)</span>
+                        </div>
+                        <input name="timegap" type="time" min="00:01" [ngClass]="isTimeValid ===false ? 'invalid-form-control': null" class="form-control w-100" [(ngModel)]="reminderSettings.timegap">
+                    </div>
+                    <h5 style="margin-left:45%" class="mt-2">OR</h5>
+                    
+                    <div class="input-group mt-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text w-100">Custom Time</span>
+                        </div>
+                        <div class="row w-100">
+                            <div class="col">
+                                <input name="customtime" type="time" [ngClass]="isCustomTimeValid ===false ? 'invalid-form-control': null" class="form-control w-100" #ctimeRef >
+                                <button type="button" class="login-button" style="float:right;" (click)= "ctimeRef.value && addTime(ctimeRef.value)"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="input-group mt-3">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text w-100">Selected Time Slots</span>
+                        </div>
+                        <select class="time-select w-100" multiple="multiple">
+                        </select>
+                    </div>
+                    <hr>
+                    <div class="row">
+                        <div class="col mt-4">
+                            <button type="submit" class="btn btn-block login-button"><b>Add/Save</b></button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div> 
+
+
+<ng-template #template>
+    <div class="modal-header" style="background-color: #05386B;color: white;">
+      <h4 class="modal-title pull-left ">Alert.</h4>
+      <button type="button" class="close pull-right" (click)="this.modalRef.hide()" style="color:white;" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body " style="background-color: #5CDB95;color: #05386B;">
+    <b>{{modalbody}}</b>
+    </div>
+  </ng-template>
+
+
+<ng-template #template2>
+    <div class="modal-header" style="background-color: #05386B;color: white;">
+        <h4 class="modal-title pull-left ">Alert.</h4>
+        <button type="button" class="close pull-right" (click)="closeSecondModal()" style="color:white;" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <div class="modal-body " style="background-color: #5CDB95;color: #05386B;">
+    <b>Are you sure you want to remove all the reminders of this type?</b>
+    <button type="button" class="btn btn-danger btn-block" (click)="deleteAlert(passedreminder);"><b>Confirm</b></button>
+    </div>
+</ng-template>

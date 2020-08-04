@@ -1,0 +1,36 @@
+<div class="helloworld chartAreaWrapper" *ngIf = "multi.length>0" style="width: 100%; overflow: auto">
+  <ngx-charts-bar-vertical *ngIf = "!!multi"
+    [view]="view"
+    [scheme]="colorScheme"
+    [results]="multi"
+    [gradient]="gradient"
+    [xAxis]="showXAxis"
+    [yAxis]="showYAxis"
+    [legend]="showLegend"
+    [showXAxisLabel]="showXAxisLabel"
+    [showYAxisLabel]="showYAxisLabel"
+    [xAxisLabel]="xAxisLabel"
+    [yAxisLabel]="yAxisLabel"
+    [legendTitle]="legendTitle"
+    [legendPosition]="legendPosition"
+    [roundDomains]="true"
+    >
+      <ng-template #tooltipTemplate let-model="model">
+          
+          Category - <b>{{model.extra.category}}</b>
+          <br>
+          Item - <b>{{model.name}}</b>
+          <br>
+          Stock - <b>{{model.value}}</b>
+          <br>
+          Next Date - <b>{{model.extra.nextreqdate}}</b>
+      </ng-template>
+  </ngx-charts-bar-vertical>
+</div>
+
+<div class="row p-2" style="border-radius:10px;" *ngIf = "multi.length==0">
+  <div class="col m-5">
+      <h3><b style="text-shadow: 2px 2px 5px #05486B;">No Summary Available</b></h3>
+  </div>
+</div>
+<input type="button" name="hiddenbutton" class="hiddenbutton" value="Hello" hidden>                  

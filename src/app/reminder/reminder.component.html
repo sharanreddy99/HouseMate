@@ -1,0 +1,12 @@
+<div class="rem-container mb-2" style="height: 40vh; overflow: scroll;">
+    <div class="row p-2 alertown mb-2" style="border-radius:10px;" *ngFor = "let reminder of reminders">
+        <div class="col" style="word-wrap: break-word;">
+            {{reminder.newtitle}}
+        </div>
+    </div>
+    <div class="row p-2" style="border-radius:10px;" *ngIf = "reminders.length==0">
+        <div class="col m-5">
+            <h3><b style="text-shadow: 2px 2px 5px #05486B;">No Reminders Available</b></h3>
+        </div>
+    </div>
+</div>

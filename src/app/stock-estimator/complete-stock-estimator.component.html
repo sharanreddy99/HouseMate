@@ -1,0 +1,74 @@
+<div class="div"  [ngClass]="isLoading$? 'd-block': 'd-none'" style="width:100vw;height:100vh; border: 2px solid black;">
+    <app-loading></app-loading>
+</div>
+
+<app-navbar [ngClass]="!isLoading$? 'd-block': 'd-none'"></app-navbar>
+    
+<div class="complete-price-estimator-container" [ngClass]="!isLoading$? 'd-block': 'd-none'">
+    <div class="container-fluid p-md-2">
+        <form ngForm>
+            <div class="row">
+                <div class="col">        
+                    <div class="input-group mt-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text w-100">Stock Purchase Duration</span>
+                        </div>
+                        <input name="duration" autocomplete="off" type="number" min="1" class="form-control w-100" placeholder="Enter no of days to purchase stock" (change)="fetchCompleteStockItems(durationRef.value,undefined)" #durationRef >      
+                    </div>
+                </div>
+            </div>
+            
+            <div class="row justify-content-center">
+                <div class="col-3 mt-2">
+                    <h5> OR</h5>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">
+                    <div class="input-group mt-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text w-100">Next Stock Purchase Date</span>
+                        </div>
+                        <input name="dateduration" title="Enter Estimated Date" autocomplete="off" type="date" min="{{todaydate}}" class="form-control w-100" (change)="fetchCompleteStockItems(undefined,dateDurationRef.value)" #dateDurationRef>      
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col">        
+                    <div class="input-group mt-2">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">Total Price</span>
+                        </div>
+                        <input name="totalprice" [disabled]="true" type="number" class="form-control w-100" [(ngModel)]="totalprice">      
+                    </div>
+                </div>
+            </div>
+            <div class="row mt-4">
+                <div class="col">
+                    <select class="estimatestock-select w-100" style="width:100%;" multiple="multiple">
+                    </select>
+                </div>
+            </div>
+    
+            <div class="row mt-5" style="width:100%; overflow:scroll;">
+                <div class="col">
+                    <table class="estimatestock-table">
+                        <thead>
+                          <tr>
+                            <th>Category</th>
+                            <th>Item Name</th>
+                            <th>Current Stock Last Date</th>
+                            <th>Current Stock Count</th>
+                            <th>Newly Required Stock</th>
+                            <th>Total Price</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </form>
+        
+    </div>
+</div> 

@@ -1,0 +1,72 @@
+@import '../login/login.component.css';
+
+
+select,textarea.form-control {
+    background-color: #EDF5E1;
+    border: 1px solid #05386B;
+}
+
+select, select option{
+    color: #05386B;
+    opacity: 0.8;
+}
+
+.custom-file-input {
+    background-color: red;
+}
+
+.card-container {
+    background-color: #EDF5E1;
+    padding: 50px;
+}
+
+.example-container {
+    padding: 50px;
+    padding-left: 20%;
+}
+
+.item-header {
+    background-color: #05386B;
+}
+
+h4.availableitemheader {
+    background-color: #05386B;
+    color: white;
+    border: 2px solid black;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.availableitemcontainer {
+    border: 2px solid black;
+    position: relative;
+    top:-14px;
+    border-top: none;
+    background-color: #8EE4AF;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+}
+
+::-webkit-scrollbar {
+    display: none;
+}
+
+::ng-deep .mat-focused .mat-form-field-label {
+    color: #05386B !important;
+}
+  
+::ng-deep .mat-form-field-label {
+    color: black !important;
+}
+
+::ng-deep .mat-form-field {
+    width:100% !important;
+}
+
+::ng-deep.mat-form-field-underline {
+    background-color: black !important;
+} 
+
+::ng-deep.mat-form-field-ripple {
+    background-color: #05386B !important;;
+}

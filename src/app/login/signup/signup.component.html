@@ -1,0 +1,68 @@
+
+<div class="login-container p-4">
+    <form autocomplete="off" ngNativeValidate>
+        <div class="input-group mt-2">
+            <div class="input-group-prepend d-none d-md-block">
+                <span class="input-group-text">First Name</span>
+            </div>
+            <input name="fname" type="text" class="form-control" [ngClass]="isFNValid===false ? 'invalid-form-control': null" placeholder="Enter First Name" [(ngModel)]="signupSettings.fn">      
+        </div>
+        
+        <div class="input-group mt-2">
+            <div class="input-group-prepend d-none d-md-block">
+                <span class="input-group-text">Last Name</span>
+            </div>
+            <input name="lname" type="text" class="form-control" [ngClass]="isLNValid===false ? 'invalid-form-control': null" placeholder="Enter Last Name" [(ngModel)]="signupSettings.ln"> 
+        </div>
+        <div class="input-group mt-2">
+            <div class="input-group-prepend d-none d-md-block">
+                <span class="input-group-text">Email </span>
+            </div>
+            <input name="email" type="email" [ngClass]="isEmailValid===false ? 'invalid-form-control': null" [disabled]="(isOTPSent && isOTPVerified)" class="form-control" placeholder="Enter Email" [(ngModel)]="signupSettings.email">
+        </div>
+        <div class="input-group mt-2">
+            <div class="input-group-prepend d-none d-md-block">
+                <span class="input-group-text">Password </span>
+            </div>
+            <input name="password" type="password" (click)="explainPassword();" [ngClass]="isPassValid===false ? 'invalid-form-control': null" class="form-control" placeholder="Enter Password" [(ngModel)]="signupSettings.pass"> 
+        </div>
+        <div class="input-group mt-2">
+            <div class="input-group-prepend d-none d-md-block">
+                <span class="input-group-text">Confirm Password </span>
+            </div>
+            <input name="confpassword" [ngClass]="isPassValid===false ? 'invalid-form-control': null" type="password" class="form-control" placeholder="Enter Password Again" [(ngModel)]="signupSettings.confpass"> 
+        </div>
+        <div class="input-group mt-2">
+            <div class="input-group-prepend d-none d-md-block">
+                <span class="input-group-text">OTP </span>
+            </div>
+            <input name="otp" type="text" class="form-control" [ngClass]="isOTPVerified===false ? 'invalid-form-control': null" placeholder="Enter OTP" [disabled]="!isOTPSent || (isOTPSent && isOTPVerified)" #otp>
+        </div>
+        
+        <div class="row">
+            <div class="col mt-4">
+                <button type="button" name="sendotp" class="btn btn-lg btn-block bluebutton" (click)="generateOTP()"><b>{{isOTPSent ? 'Regenerate' : 'Generate'}} OTP</b></button>
+            </div>
+            <div class="col mt-4">
+                <button type="button" name="verifyotp" class="btn btn-lg btn-block bluebutton" [disabled]="!isOTPSent" (click)="verifyOTP(otp.value)"><b>Verify OTP</b></button>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col mt-4">
+                <button type="button" name="signupbutton" class="btn btn-lg btn-block bluebutton" (click)="onSignupSubmit()" [disabled]="!isOTPSent || !isOTPVerified"><b>Signup</b></button>
+            </div>
+        </div>
+    </form>
+
+    <ng-template #template>
+        <div class="modal-header" style="background-color: #05386B;color: white;">
+          <h4 class="modal-title pull-left ">Alert.</h4>
+          <button type="button" class="close pull-right" style="color:white;" aria-label="Close" (click)="modalRef.hide()">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body " style="background-color: #5CDB95;color: #05386B;">
+          <b>{{modalbody}}</b>
+        </div>
+    </ng-template>
+</div>
