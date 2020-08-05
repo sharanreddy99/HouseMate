@@ -14,9 +14,12 @@ export class AppComponent implements OnInit{
   }
 
   ngOnInit(){
-    let index = window.location.href.indexOf('/',7);
-    let urlRoute =  window.location.href.substring(index);
-    this.router.navigate(['' || urlRoute]);
+      
+      let weburl = '.amazonaws.com';
+      let index = window.location.href.indexOf(weburl)+weburl.length+1;
+      let urlRoute =  window.location.href.substring(index);
+      
+      this.router.navigate([urlRoute]);
   }
 
 }

@@ -52,9 +52,6 @@ export class SigninComponent implements OnInit  {
     }else{
       
       localStorage.clear();
-      localStorage.setItem('email',undefined);
-      localStorage.setItem('password',undefined);
-      localStorage.setItem('rememberme',undefined);
       this.rememberme = false;
     }
   }
