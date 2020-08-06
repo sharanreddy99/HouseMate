@@ -63,7 +63,7 @@
                         <div class="row w-100">
                             <div class="col">
                                 <input name="customdate" type="date" min="{{todaydate}}" [ngClass]="isCustomDaysValid ===false ? 'invalid-form-control': null" class="form-control w-100" #cdateRef>
-                                <button type="button" class="login-button" style="float:right;" (click)= "cdateRef.value && addDate(cdateRef.value)"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                <button type="button" class="bluebutton" style="float:right;" (click)= "cdateRef.value && addDate(cdateRef.value)"><i class="fa fa-plus" aria-hidden="true"></i></button>
                             </div>
                         </div>
                     </div>
@@ -90,7 +90,7 @@
                         <div class="row w-100">
                             <div class="col">
                                 <input name="customtime" type="time" [ngClass]="isCustomTimeValid ===false ? 'invalid-form-control': null" class="form-control w-100" #ctimeRef >
-                                <button type="button" class="login-button" style="float:right;" (click)= "ctimeRef.value && addTime(ctimeRef.value)"><i class="fa fa-plus" aria-hidden="true"></i></button>
+                                <button type="button" class="bluebutton" style="float:right;" (click)= "ctimeRef.value && addTime(ctimeRef.value)"><i class="fa fa-plus" aria-hidden="true"></i></button>
                             </div>
                         </div>
                     </div>
@@ -104,7 +104,7 @@
                     <hr>
                     <div class="row">
                         <div class="col mt-4">
-                            <button type="submit" class="btn btn-block login-button"><b>Add/Save</b></button>
+                            <button type="submit" class="btn btn-block bluebutton"><b>Add/Save</b></button>
                         </div>
                     </div>
                 </div>

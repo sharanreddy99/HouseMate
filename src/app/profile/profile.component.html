@@ -1,4 +1,6 @@
-<app-loading [ngClass]="isLoading$ ? 'd-block' : 'd-none'"></app-loading>
+<div class="contasd" style="width:100vw;height:100vh;" [ngClass]="isLoading$ ? 'd-block' : 'd-none'">
+    <app-loading></app-loading>
+</div>
 
 <div class="profile-container" [ngClass]="!isLoading$ ? 'd-block' : 'd-none'">
     <app-navbar></app-navbar>
