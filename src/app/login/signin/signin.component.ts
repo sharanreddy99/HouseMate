@@ -43,7 +43,6 @@ export class SigninComponent implements OnInit  {
   
   ngOnInit(){
     this.returnUrl = this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
-
     if(localStorage.getItem('rememberme') == 'true'){
       this.signinSettings.email = localStorage.getItem('email');
       this.signinSettings.password = localStorage.getItem('password');

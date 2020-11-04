@@ -14,12 +14,13 @@ export class AppComponent implements OnInit{
   }
 
   ngOnInit(){
+      // let weburl = '.amazonaws.com:3100';
+      // let index = window.location.href.indexOf(weburl)+weburl.length+1;
+      // let urlRoute =  window.location.href.substring(index);
       
-      let weburl = '.amazonaws.com:3100';
-      let index = window.location.href.indexOf(weburl)+weburl.length+1;
-      let urlRoute =  window.location.href.substring(index);
-      
-      this.router.navigate([urlRoute]);
+      // this.router.navigate([urlRoute]);
+
+      this.router.navigate(['']); // For local server
   }
 
 }

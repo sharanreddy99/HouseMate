@@ -54,7 +54,7 @@
     z-index: 5;
 }
 
-input.invalid-form-control {
+input.invalid-form-control,select.invalid-form-control {
     background-color: rgb(231, 123, 123);
 }
 
@@ -100,7 +100,7 @@ input::selection {
 }
 
 .custom-select {
-    background-color: #EDF5E1 !important;
+    background-color: #EDF5E0;
 }
 
 

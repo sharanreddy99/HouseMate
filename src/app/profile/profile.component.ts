@@ -15,6 +15,8 @@ declare var $: any;
 export class ProfileComponent implements OnInit {
 
   modalRef: BsModalRef;
+  modalRef2: BsModalRef;
+
   @ViewChild('template') template: TemplateRef<any>;
   @ViewChild('template2') template2: TemplateRef<any>;
   
@@ -206,11 +208,11 @@ export class ProfileComponent implements OnInit {
 
   
   openSecondModal(){
-    this.modalService.show(this.template2);
+    this.modalRef2 = this.modalService.show(this.template2);
   }
 
   closeSecondModal(){
-    this.modalService.hide(1);
+    this.modalRef2.hide();
   }
 
   goDelete() {

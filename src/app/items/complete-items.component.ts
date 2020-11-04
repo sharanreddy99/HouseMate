@@ -28,86 +28,91 @@ export class CompleteItemsComponent implements OnInit{
  
   ngOnInit(){
 
-    $('.category-select').select2({
-      data: this.categoryOptions
-    });
-    
-    $('.item-select').select2({
-      data: this.itemOptions
-    });
-
-    $(document).ready(()=> {
-
-      this.isLoading$ = true;
-      this.itemService.postGetDisabledState(this.checked,localStorage.getItem('email'),localStorage.getItem('password')).subscribe(
-        result => {    
-          this.isLoading$ = false;
-          this.checked = result.checked;
-          this.itemService.postSetDisabledState(this.checked,localStorage.getItem('email'),localStorage.getItem('password')).subscribe();
-        }
-      );
-
-      this.itemService.postGetCategory(localStorage.getItem('email'),localStorage.getItem('password')).subscribe(
-        result => {
-          this.isLoading$ = false;
-          this.categoryOptions = [{id: 0, text: 'Select a Category'}];
-          this.categoryOptions = this.categoryOptions.concat(result);  
-          
-          $('.category-select').select2({
-            data: this.categoryOptions
-          });
-
-          let id = localStorage.getItem('categoryid');
-          if(id && parseInt(id)<this.categoryOptions.length){
-            $('.category-select').val(id).trigger('change').trigger({type: 'select2:selecting'});
-          }else{
-            $('.category-select').val(0).trigger('change')
-          }
-        },
-        error => {
-        this.isLoading$ = false;
-        this.router.navigate(['items'])
-        }
-      )
-    });
-    
-    $('.category-select').on('select2:selecting',(e)=>{
-      if(e && e.params && e.params.args && e.params.args.data){
-        localStorage.setItem('categoryid',e.params.args.data.id);
-        localStorage.setItem('category',e.params.args.data.text);
+      if(localStorage.getItem('isDisabled')==undefined){
+        localStorage.setItem('isDisabled','false');
       }
-
+      
+      this.checked = localStorage.getItem('isDisabled')=='true';
+      $('.category-select').select2({
+        data: this.categoryOptions
+      });
+      
+      $('.item-select').select2({
+        data: this.itemOptions
+      });
+  
+      $(document).ready(()=> {
+  
         this.isLoading$ = true;
-        this.itemService.postGetItem(localStorage.getItem('category'),localStorage.getItem('email'),localStorage.getItem('password')).subscribe(
+        this.itemService.postGetDisabledState(localStorage.getItem('email'),localStorage.getItem('password')).subscribe(
+          result => {    
+            this.isLoading$ = false;
+            this.checked = result.checked;  
+            localStorage.setItem('isDisabled',''+this.checked);
+          }
+        );
+  
+        this.itemService.postGetCategory(localStorage.getItem('email'),localStorage.getItem('password')).subscribe(
           result => {
             this.isLoading$ = false;
-            this.itemOptions = [{id: 0, text: 'Select an Item'}]
-            this.itemOptions = this.itemOptions.concat(result); 
-            $('.item-select').empty();
-            $('.item-select').select2({
-              data: this.itemOptions
+            this.categoryOptions = [{id: 0, text: 'Select a Category'}];
+            this.categoryOptions = this.categoryOptions.concat(result);  
+            
+            $('.category-select').select2({
+              data: this.categoryOptions
             });
-
+  
+            let id = localStorage.getItem('categoryid');
+            if(id && parseInt(id)<this.categoryOptions.length){
+              $('.category-select').val(id).trigger('change').trigger({type: 'select2:selecting'});
+            }else{
+              $('.category-select').val(0).trigger('change')
+            }
           },
           error => {
-            this.isLoading$ = false;
-          },
-          () => {
-            
-            let id = localStorage.getItem('nameid');
-            if(id && parseInt(id)<this.itemOptions.length){
-              $('.item-select').val(id).trigger('change');
-            }else{
-              $('.item-select').val(0).trigger('change');
-            }
+          this.isLoading$ = false;
+          this.router.navigate(['items'])
           }
         )
       });
-    
-    $('.item-select').on('select2:selecting',(e)=>{
-        localStorage.setItem('nameid',e.params.args.data.id);
-        localStorage.setItem('name',e.params.args.data.text);
-    });
+      
+      $('.category-select').on('select2:selecting',(e)=>{
+        if(e && e.params && e.params.args && e.params.args.data){
+          localStorage.setItem('categoryid',e.params.args.data.id);
+          localStorage.setItem('category',e.params.args.data.text);
+        }
+  
+          this.isLoading$ = true;
+          this.itemService.postGetItem(localStorage.getItem('category'),localStorage.getItem('email'),localStorage.getItem('password')).subscribe(
+            result => {
+              this.isLoading$ = false;
+              this.itemOptions = [{id: 0, text: 'Select an Item'}]
+              this.itemOptions = this.itemOptions.concat(result); 
+              $('.item-select').empty();
+              $('.item-select').select2({
+                data: this.itemOptions
+              });
+  
+            },
+            error => {
+              this.isLoading$ = false;
+            },
+            () => {
+              
+              let id = localStorage.getItem('nameid');
+              if(id && parseInt(id)<this.itemOptions.length){
+                $('.item-select').val(id).trigger('change');
+              }else{
+                $('.item-select').val(0).trigger('change');
+              }
+            }
+          )
+        });
+      
+      $('.item-select').on('select2:selecting',(e)=>{
+          localStorage.setItem('nameid',e.params.args.data.id);
+          localStorage.setItem('name',e.params.args.data.text);
+      });
   }
 
   openAddItem(){
@@ -171,6 +176,12 @@ export class CompleteItemsComponent implements OnInit{
   }
 
   toggleDisabled(){
-    this.itemService.postSetDisabledState(this.checked,localStorage.getItem('email'),localStorage.getItem('password')).subscribe();
+    this.isLoading$ = true;
+    this.itemService.postSetDisabledState(this.checked,localStorage.getItem('email'),localStorage.getItem('password')).subscribe(
+      (result)=>{
+        localStorage.setItem('isDisabled',''+this.checked);
+        this.isLoading$ = false;
+      }
+    );
   }
 }

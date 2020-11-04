@@ -124,7 +124,17 @@ export class EdititemComponent implements OnInit {
     else{
       this.isUnitsValid = true;
     }
+
     
+    if(!(parseFloat(''+this.itemSettings.quantity) && parseFloat(''+this.itemSettings.quantity)>0)){
+      setTimeout(()=>{
+        this.closeSecondModal();
+      },2500);
+      this.itemSettings.quantity = undefined;  
+      this.secondmodalbody = "Provide a valid stock quantity.";
+      this.openSecondModal();
+      return;
+    }
     
     if(this.itemSettings.notify === 'choose'){
       this.isNotifyValid= false;
@@ -156,6 +166,16 @@ export class EdititemComponent implements OnInit {
         this.isUtilTimeValid = false;
       }
       
+      if(!(parseFloat(''+this.itemSettings.utilizationQuantity) && parseFloat(''+this.itemSettings.utilizationQuantity)>0)){
+        setTimeout(()=>{
+          this.closeSecondModal();
+        },2500);
+        this.itemSettings.utilizationQuantity = undefined;  
+        this.secondmodalbody = "Provide a valid Utilization quantity.";
+        this.openSecondModal();
+        return;
+      }
+
       if(this.itemSettings.utilizationUnits === 'choose'){
         this.isUtilUnitsValid = false;
       }else{

@@ -151,6 +151,7 @@ export class SignupComponent implements OnInit {
         error  => {
           setTimeout(()=>{
             this.modalRef.hide();
+            this.userService.updateLoading('false');    
           },3000);
           this.modalbody = error.error.msg;
           this.openModal();

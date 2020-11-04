@@ -85,7 +85,16 @@ export class AdditemComponent implements OnInit {
     }else{
       this.isUnitsValid = true;
     }
-    
+
+    if(!(parseFloat(''+this.itemSettings.quantity) && parseFloat(''+this.itemSettings.quantity)>0)){
+      setTimeout(()=>{
+        this.closeSecondModal();
+      },2500);
+      this.itemSettings.quantity = undefined;  
+      this.secondmodalbody = "Provide a valid stock quantity.";
+      this.openSecondModal();
+      return;
+    }
     
     if(this.itemSettings.notify === 'choose'){
       this.isNotifyValid= false;
@@ -115,6 +124,16 @@ export class AdditemComponent implements OnInit {
         this.isUtilTimeValid = true;
       }else{
         this.isUtilTimeValid = false;
+      }
+
+      if(!(parseFloat(''+this.itemSettings.utilizationQuantity) && parseFloat(''+this.itemSettings.utilizationQuantity)>0)){
+        setTimeout(()=>{
+          this.closeSecondModal();
+        },2500);
+        this.itemSettings.utilizationQuantity = undefined;  
+        this.secondmodalbody = "Provide a valid Utilization quantity.";
+        this.openSecondModal();
+        return;
       }
       
       if(this.itemSettings.utilizationUnits === 'choose'){
@@ -156,7 +175,7 @@ export class AdditemComponent implements OnInit {
         delete this.itemSettings.utilizationUnits;
 
       this.isLoading$ = true;
-      this.itemService.postAddItem(this.itemSettings,localStorage.getItem('email'),localStorage.getItem('password')).subscribe(
+      this.itemService.postAddItem(this.itemSettings,localStorage.getItem('email'),localStorage.getItem('password'),localStorage.getItem('isDisabled')=='true').subscribe(
         result => {
           this.isLoading$ = false;
           setTimeout(()=>{

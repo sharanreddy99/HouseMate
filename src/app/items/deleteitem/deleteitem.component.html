@@ -31,7 +31,7 @@
             <div class="input-group-prepend d-block w-100 d-none d-md-block">
                 <span class="input-group-text">Quantity</span>
             </div>
-            <input name="qty" [disabled]="true" required type="number" min="0" class="form-control w-100" placeholder="Enter Item Quantity" [(ngModel)]="itemSettings.quantity">      
+            <input name="qty" [disabled]="true" required type="text" class="form-control w-100" placeholder="Enter Item Quantity" [(ngModel)]="itemSettings.quantity">      
           </div>
 
           <div class="input-group mt-2">
@@ -87,7 +87,7 @@
               <div class="input-group-prepend d-block w-100">
                   <span class="input-group-text">Utilization Quantity</span>
               </div>
-              <input name="utilqty"  [disabled]="true" required type="number" min="0" class="form-control w-100" placeholder="Enter Utilization Quantity" [(ngModel)]="itemSettings.utilizationQuantity">      
+              <input name="utilqty"  [disabled]="true" required type="text" class="form-control w-100" placeholder="Enter Utilization Quantity" [(ngModel)]="itemSettings.utilizationQuantity">      
             </div>
 
             <div class="input-group mt-2">

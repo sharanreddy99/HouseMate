@@ -11,8 +11,8 @@ export class ItemService {
 
   constructor(private http: HttpClient) { }
 
-  postAddItem(itemSettings: ItemSettings,email: string,password: string): Observable<any>{
-    return this.http.post(baseUrl+'addItem',{itemSettings,email,password});
+  postAddItem(itemSettings: ItemSettings,email: string,password: string, isDisabled: boolean): Observable<any>{
+    return this.http.post(baseUrl+'addItem',{itemSettings,email,password,isDisabled});
   }
 
   postGetCategory(email: string,password: string): Observable<any> {
@@ -43,8 +43,8 @@ export class ItemService {
     return this.http.post(baseUrl+'removeItem',{itemSettings,newstockcount,newquantity,newunits,email,password});
   }
 
-  postGetDisabledState(isDisabled: boolean, email: string, password: string): Observable<any>{
-    return this.http.post(baseUrl+'getDisabled',{isDisabled,email,password});
+  postGetDisabledState(email: string, password: string): Observable<any>{
+    return this.http.post(baseUrl+'getDisabled',{email,password});
   }
 
   postSetDisabledState(isDisabled: boolean, email: string, password: string): Observable<any>{
