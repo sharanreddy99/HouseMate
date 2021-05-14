@@ -1,0 +1,22 @@
+<div class="container ">
+    <div class="p-md-2">
+        <div class="row">
+            <div class="col p-2">
+                <select class="custom-select category-select" style="width:100%;" #categoryRef>
+                </select>       
+            </div>
+        </div>
+        <div class="row">
+            <div class="col p-2">
+                <select class="custom-select item-select" style="width:100%;" #itemRef>
+                </select>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col p-2">
+                <button type="button" name="edititem" class="btn btn-lg btn-block bluebutton" [disabled]="categoryRef.value==0 || itemRef.value==0" (click)= "openEditItem()"><b>View Item</b></button>
+            </div>
+        </div>
+    </div>
+
+</div>

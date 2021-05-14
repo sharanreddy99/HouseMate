@@ -1,0 +1,150 @@
+<div class="div"  [ngClass]="isLoading$? 'd-block': 'd-none'" style="width:100vw;height:100vh; border: 2px solid black;">
+  <app-loading></app-loading>
+</div>
+
+<div class="contasd" [ngClass]="!isLoading$? 'd-block': 'd-none'">
+<div class="modal-header" style="background-color: #05386B;color: white;">
+  <h4 class="modal-title pull-left ">Add Item.</h4>
+  <button type="button" class="close pull-right" (click)="onCancel()" style="color:white;" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body " style="background-color: #5CDB95;color: #05386B;">
+  <div class="login-container p-4">
+    <form autocomplete="off" ngNativeValidate (ngSubmit)="addItem()">
+        <div class="input-group mt-2">
+            <div class="input-group-prepend d-none d-md-block w-100">
+                <span class="input-group-text">Category</span>
+            </div>
+            <input name="category" required type="text" class="form-control w-100" placeholder="Enter Item Category" [(ngModel)]="itemSettings.category">      
+        </div>
+        
+        <div class="input-group mt-2">
+          <div class="input-group-prepend d-none d-md-block w-100">
+              <span class="input-group-text">Name</span>
+          </div>
+          <input name="name" required type="text" class="form-control w-100" placeholder="Enter Item Name" [(ngModel)]="itemSettings.name">      
+        </div>
+      
+        
+        <div class="input-group mt-2">
+          <div class="input-group-prepend d-none d-md-block w-100">
+              <span class="input-group-text">Quantity</span>
+          </div>
+          <input name="qty" required type="text" class="form-control w-100" placeholder="Enter Item Quantity" [(ngModel)]="itemSettings.quantity">      
+        </div>
+
+        <div class="input-group mt-2">
+          <div class="input-group-prepend d-none d-md-block w-100">
+            <span class="input-group-text">Units</span>
+          </div>
+          <select name="units" [ngClass]="isUnitsValid===false ? 'invalid-form-control': null" class="custom-select w-100" [(ngModel)]="itemSettings.units">
+            <option value="choose" selected>Choose Units...</option>
+            <option value="kg">Kilo Grams(kg)</option>
+            <option value="gms">Grams (gms)</option>
+            <option value="lit">Litre (lit)</option>
+            <option value="ml">Milli Litres (ml)</option>
+            <option value="dozen">Dozen</option>
+            <option value="units">Units</option>
+          </select>
+        </div>
+        
+        
+        <div class="input-group mt-2">
+          <div class="input-group-prepend d-none d-md-block w-100">
+              <span class="input-group-text">Stock Count</span>
+          </div>
+          <input name="stockcount" type="number" class="form-control w-100" min="0" placeholder="Enter Stock Count" [(ngModel)]="itemSettings.stockcount">      
+        </div>
+
+        <div class="input-group mt-2">
+          <div class="input-group-prepend d-none d-md-block w-100">
+              <span class="input-group-text">Price Per Stock</span>
+          </div>
+          <input name="price" required type="number" min="0" class="form-control w-100" placeholder="Enter Item Price Per Stock" [(ngModel)]="itemSettings.price">      
+        </div>
+
+        <div class="input-group mt-2">
+          <div class="input-group-prepend d-none d-md-block w-100">
+            <span class="input-group-text">Notify Type</span>
+          </div>
+          <select name="notify" [ngClass]="isNotifyValid === false ? 'invalid-form-control': null" class="custom-select w-100" [(ngModel)]="itemSettings.notify">
+            <option value="choose" selected>Choose Notify Type...</option>
+            <option value="auto" >Automatic</option>
+            <option value="request">Request</option>
+          </select>
+        </div>
+
+        <div class="notify-auto p-0 m-0" *ngIf = "itemSettings.notify==='auto'">
+          <div class="input-group mt-2">
+            <div class="input-group-prepend d-none d-md-block w-100">
+                <span class="input-group-text">Estimated Utilization Time (in Days)</span>
+            </div>
+            <input name="utiltime" required type="number" min="1" class="form-control w-100" placeholder="Enter Utilization Period (in Days)" [(ngModel)]="itemSettings.utilizationTime">      
+          </div>
+
+          <div class="input-group mt-2">
+            <div class="input-group-prepend d-none d-md-block w-100">
+                <span class="input-group-text">Estimated Utilization Quantity for Above Specified Time</span>
+            </div>
+            <input name="utilqty" required type="text" class = "form-control w-100" placeholder="Enter Utilization Quantity" [(ngModel)]="itemSettings.utilizationQuantity">      
+          </div>
+
+          <div class="input-group mt-2">
+            <div class="input-group-prepend d-none d-md-block w-100">
+              <span class="input-group-text">Utilization Units</span>
+            </div>
+            <select name="utilunits" [ngClass]="isUtilUnitsValid ===false ? 'invalid-form-control': null" class="custom-select w-100" [(ngModel)]="itemSettings.utilizationUnits">
+              <option value="choose" selected>Choose Utilization Units...</option>
+              <option value="kg">Kilo Grams(kg)</option>
+              <option value="gms">Grams (gms)</option>
+              <option value="lit">Litre (lit)</option>
+              <option value="ml">Milli Litres (ml)</option>
+              <option value="dozen">Dozen</option>
+              <option value="units">Units</option>
+            </select>
+          </div>
+        </div>
+
+        <div class="notify-request p-0 m-0" *ngIf = "itemSettings.notify === 'request'">
+          <div class="input-group mt-2">
+            <div class="input-group-prepend d-none d-md-block w-100">
+              <span class="input-group-text">Next Request Date</span>
+            </div>
+            <input name="date" class="form-control w-100" min="{{todaydate}}" [ngClass]="isDateValid ===false ? 'invalid-form-control': null" type="date" [(ngModel)]="itemSettings.nextreqdate">
+          </div>
+        </div>
+        
+
+        <div class="input-group mt-2">
+          <div class="input-group-prepend d-none d-md-block w-100">
+            <span class="input-group-text">Description</span>
+          </div>
+          <textarea name="description" class="form-control w-100" rows="2" [(ngModel)]="itemSettings.description" placeholder="Enter Description (Optional)"></textarea>
+        </div>
+
+        
+      <div class="row">
+        <div class="col mt-4">
+            <button type="submit" class="btn btn-lg btn-block bluebutton" ><b>Add</b></button>
+        </div>
+        <div class="col mt-4">
+            <button type="button" name="cancel" class="btn btn-lg btn-block bluebutton" (click)="onCancel()"><b>Cancel</b></button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<ng-template #template2>
+<div class="modal-header" style="background-color: #05386B;color: white;">
+  <h4 class="modal-title pull-left ">Alert.</h4>
+  <button type="button" class="close pull-right" (click)="closeSecondModal()" style="color:white;" aria-label="Close">
+    <span aria-hidden="true">&times;</span>
+  </button>
+</div>
+<div class="modal-body " style="background-color: #5CDB95;color: #05386B;">
+<b>{{secondmodalbody}}</b>
+</div>
+</ng-template>
+</div>

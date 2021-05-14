@@ -1,0 +1,33 @@
+.container-fluid {
+  background-color: #8EE4AF;
+  min-height: 100vh;
+}
+
+.h4 {
+  font-weight: bold;
+}
+
+.dashboard-card-container {
+  background-color: #EDF5E1;
+  min-height: 30vh;
+  border-radius: 8px;
+}
+
+.btn-sm {
+  background-color: #05386B;
+  color: white;
+}
+
+.dropdown-item:hover {
+  cursor: pointer;
+  background-color: rgb(235, 225, 225);
+}
+
+.col.mt-4.ml-md-4.dashboard-card-container {
+  overflow-x: scroll;
+}
+
+
+.col.mt-4.ml-md-4.dashboard-card-container::-webkit-scrollbar {
+  display: none;
+}

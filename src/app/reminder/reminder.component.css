@@ -1,0 +1,50 @@
+@import '../login/login.component.css';
+
+::-webkit-scrollbar {
+    display:none;
+}
+
+.complete-reminder-container {
+    height: 100vh;
+    min-height:100vh;
+}
+
+.reminder-option-div {
+    background-color: #EDF5E1;
+    border-radius: 10px;
+    padding-bottom: 1%;
+}
+
+.reminder-display-div {
+    background-color: #EDF5E0;
+    min-height: 20vh;
+    max-height: 85vh;
+    border-radius:10px;
+    overflow:scroll;
+}
+
+.rem-container {
+    height: 40vh;
+    overflow: scroll;
+    border-radius: 10px;
+}
+
+.custom-select option::selection {
+    background-color: red;
+}
+
+.alertown {
+    background-color: #05386B;
+    color: white;
+    font-weight: bold;
+    border-radius:6px;
+}
+
+.fa:hover {
+    color: red;
+}
+
+.fa-plus:hover {
+    color: white;
+}
+

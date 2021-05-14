@@ -1,0 +1,51 @@
+<div class="div"  [ngClass]="isLoading$? 'd-block': 'd-none'" style="width:100vw;height:100vh; border: 2px solid black;">
+    <app-loading></app-loading>
+</div>
+
+<div class="complete-summary-container" [ngClass]="!isLoading$? 'd-block': 'd-none'">
+    <app-navbar></app-navbar>
+    
+    <div class="container">
+        <div class="row">
+            <div class="col-12 p-2">
+                <select class="custom-select category-select" style="width:100%;" #categoryRef>
+                </select>
+            </div>
+        </div>
+    
+        <div class="row">
+            <div class="col-12 p-2">
+                <div class="helloworld chartAreaWrapper" style="width: 100%; overflow: auto">
+                    <ngx-charts-bar-vertical *ngIf = "!!multi"
+                      [view]="view"
+                      [scheme]="colorScheme"
+                      [results]="multi"
+                      [gradient]="gradient"
+                      [xAxis]="showXAxis"
+                      [yAxis]="showYAxis"
+                      [legend]="showLegend"
+                      [showXAxisLabel]="showXAxisLabel"
+                      [showYAxisLabel]="showYAxisLabel"
+                      [xAxisLabel]="xAxisLabel"
+                      [yAxisLabel]="yAxisLabel"
+                      [legendTitle]="legendTitle"
+                      [legendPosition]="legendPosition"
+                      [roundDomains]="true"
+                      >
+                        <ng-template #tooltipTemplate let-model="model">
+                            
+                            Category - <b>{{model.extra.category}}</b>
+                            <br>
+                            Item - <b>{{model.name}}</b>
+                            <br>
+                            Stock - <b>{{model.value}}</b>
+                            <br>
+                            Next Date - <b>{{model.extra.nextreqdate}}</b>
+                        </ng-template>
+                    </ngx-charts-bar-vertical>
+                  </div>
+                  <input type="button" name="hiddenbutton" class="hiddenbutton" value="Hello" hidden>                  
+            </div>
+        </div>
+    </div>
+</div> 

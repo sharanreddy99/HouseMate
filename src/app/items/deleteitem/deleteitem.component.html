@@ -1,0 +1,170 @@
+<div class="div"  [ngClass]="isLoading$? 'd-block': 'd-none'" style="width:100vw;height:100vh; border: 2px solid black;">
+  <app-loading></app-loading>
+</div>
+
+<div class="contasd" [ngClass]="!isLoading$? 'd-block': 'd-none'">
+  <div class="modal-header" style="background-color: #05386B;color: white;">
+    <h4 class="modal-title pull-left "> Item.</h4>
+    <button type="button" class="close pull-right" (click)="onCancel()" style="color:white;" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body " style="background-color: #5CDB95;color: #05386B;">
+    <div class="login-container p-4">
+      <form autocomplete="off" ngNativeValidate>
+          <div class="input-group mt-2">
+              <div class="input-group-prepend d-block w-100 d-none d-md-block">
+                  <span class="input-group-text">Category</span>
+              </div>
+              <input [disabled]="true" name="category" required type="text" class="form-control w-100" placeholder="Enter Item Category" [(ngModel)]="itemSettings.category">      
+          </div>
+          
+          <div class="input-group mt-2">
+            <div class="input-group-prepend d-block w-100 d-none d-md-block">
+                <span class="input-group-text">Name</span>
+            </div>
+            <input name="name" [disabled]="true" required type="text" class="form-control w-100" placeholder="Enter Item Name" [(ngModel)]="itemSettings.name">      
+          </div>
+        
+          
+          <div class="input-group mt-2">
+            <div class="input-group-prepend d-block w-100 d-none d-md-block">
+                <span class="input-group-text">Quantity</span>
+            </div>
+            <input name="qty" [disabled]="true" required type="text" class="form-control w-100" placeholder="Enter Item Quantity" [(ngModel)]="itemSettings.quantity">      
+          </div>
+
+          <div class="input-group mt-2">
+            <div class="input-group-prepend d-block w-100 d-none d-md-block">
+              <span class="input-group-text">Units</span>
+            </div>
+            <select name="units" [disabled]="true"  class="custom-select w-100" [(ngModel)]="itemSettings.units">
+              <option value="choose" selected>Choose Units...</option>
+              <option value="kg">Kilo Grams(kg)</option>
+              <option value="gms">Grams (gms)</option>
+              <option value="lit">Litre (lit)</option>
+              <option value="ml">Milli Litres (ml)</option>
+              <option value="dozen">Dozen</option>
+              <option value="units">Units</option>
+            </select>
+          </div>
+
+          
+          <div class="input-group mt-2">
+            <div class="input-group-prepend d-block w-100 d-none d-md-block">
+                <span class="input-group-text">Stock Count</span>
+            </div>
+            <input name="stockcount" [disabled]="true" type="number" class="form-control w-100" min="0" placeholder="Enter Stock Count" [(ngModel)]="itemSettings.stockcount">      
+          </div>
+          
+          <div class="input-group mt-2">
+            <div class="input-group-prepend d-block w-100 d-none d-md-block">
+                <span class="input-group-text">Price Per Piece</span>
+            </div>
+            <input name="price" [disabled] = "true" required type="number" min="0" class="form-control w-100" placeholder="Enter Item Price Per Piece" [(ngModel)]="itemSettings.price">      
+          </div>
+
+          <div class="input-group mt-2">
+            <div class="input-group-prepend d-block w-100 d-none d-md-block">
+              <span class="input-group-text">Notify Type</span>
+            </div>
+            <select name="notify" [disabled]="true"  class="custom-select w-100" [(ngModel)]="itemSettings.notify">
+              <option value="choose" selected>Choose Notify Type...</option>
+              <option value="auto" >Automatic</option>
+              <option value="request">Request</option>
+            </select>
+          </div>
+          
+          <div class="notify-auto p-0 m-0" *ngIf = "itemSettings.notify=='auto'">  
+            <div class="input-group mt-2">
+              <div class="input-group-prepend d-block w-100">
+                  <span class="input-group-text">Utilization Time (in Days)</span>
+              </div>
+              <input name="utiltime" [disabled]="true" required type="number" min="0" class="form-control w-100" placeholder="Enter Utilization Period (in Days)" [(ngModel)]="itemSettings.utilizationTime">      
+            </div>
+
+            <div class="input-group mt-2">
+              <div class="input-group-prepend d-block w-100">
+                  <span class="input-group-text">Utilization Quantity</span>
+              </div>
+              <input name="utilqty"  [disabled]="true" required type="text" class="form-control w-100" placeholder="Enter Utilization Quantity" [(ngModel)]="itemSettings.utilizationQuantity">      
+            </div>
+
+            <div class="input-group mt-2">
+              <div class="input-group-prepend d-block w-100">
+                <span class="input-group-text">Utilization Units</span>
+              </div>
+              <select name="utilunits"  [disabled]="true"  class="custom-select w-100" [(ngModel)]="itemSettings.utilizationUnits">
+                <option value="choose" selected>Choose Utilization Units...</option>
+                <option value="kg">Kilo Grams(kg)</option>
+                <option value="gms">Grams (gms)</option>
+                <option value="lit">Litre (lit)</option>
+                <option value="ml">Milli Litres (ml)</option>
+                <option value="dozen">Dozen</option>
+                <option value="units">Units</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="notify-request p-0 m-0" *ngIf = "itemSettings.notify=='request'">
+            <div class="input-group mt-2">
+              <div class="input-group-prepend d-block w-100">
+                  <span class="input-group-text">Request Date</span>
+              </div>
+              <input name="nextreqdate"  [disabled]="true" required type="date" class="form-control w-100" [(ngModel)]="itemSettings.nextreqdate">      
+            </div>
+          </div>
+
+          <div class="input-group mt-2">
+            <div class="input-group-prepend d-block w-100 d-none d-md-block">
+              <span class="input-group-text">Description</span>
+            </div>
+            <textarea name="description" [disabled]="true" class="form-control w-100" rows="2" [(ngModel)]="itemSettings.description"></textarea>
+          </div>
+          
+        <div class="row">
+          
+          <div class="col mt-4">
+            <button type="button" name="cancel" class="btn btn-lg btn-block bluebutton" (click)="onCancel()"><b>Cancel</b></button>
+        </div>
+          <div class="col mt-4">
+              <button type="button" class="btn btn-lg btn-block btn-danger" (click)="openThirdModal()"><b>Delete</b></button>
+          </div>
+        </div>
+      </form>
+    </div>
+  </div>
+
+<ng-template #template2>
+  <div class="modal-header" style="background-color: #05386B;color: white;">
+    <h4 class="modal-title pull-left ">Alert.</h4>
+    <button type="button" class="close pull-right" (click)="closeSecondModal()" style="color:white;" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body " style="background-color: #5CDB95;color: #05386B;">
+  <b>{{secondmodalbody}}</b>
+  </div>
+</ng-template>
+
+
+<ng-template #template3>
+  <div class="modal-header" style="background-color: #05386B;color: white;">
+    <h4 class="modal-title pull-left ">Alert.</h4>
+    <button type="button" class="close pull-right" (click)="closeThirdModal()" style="color:white;" aria-label="Close">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body " style="background-color: #5CDB95;color: #05386B;">
+    <b>Are you sure you want to delete the current item?</b>
+    <div class="row">
+      <div class="col mt-4">
+        <button type="button" (click)="closeThirdModal()" class="btn btn-block bluebutton">Cancel</button>
+      </div>
+      <div class="col mt-4">
+        <button type="button" (click)="deleteItem()" class="btn btn-block btn-danger">Delete</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
+</div>

@@ -1,0 +1,28 @@
+<div class="stock-container p-md-2">
+    <div class="row justify-content-center">
+        <div class="col-12">
+            <div class="input-group mt-2">
+                <input name="duration" autocomplete="off" type="number" min="1" class="form-control" placeholder="No of days to purchase stock" (change)="fetchStockItems(durationRef.value,undefined)" #durationRef>      
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col mt-2">
+            <h4 style="display:inline;margin-left: 40%;"> OR</h4>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="input-group mt-2">
+                <input name="dateduration" title="Enter Estimated Date" autocomplete="off" type="date" min="{{todaydate}}" class="form-control" (change)="fetchStockItems(undefined,dateDurationRef.value)" #dateDurationRef>      
+            </div>
+        </div>
+    </div>
+    <div class="row mt-4">
+        <div class="col">
+            <select class="estimatestock-select" style="width:100%;" multiple="multiple">
+            </select>
+        </div>
+    </div>
+    
+</div>

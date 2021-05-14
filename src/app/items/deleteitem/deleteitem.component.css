@@ -1,0 +1,25 @@
+@import '../../login/login.component.css';
+
+
+.input-group-text {
+    width:100%;
+}
+
+select,textarea.form-control {
+    background-color: #EDF5E1;
+    border: 1px solid #05386B;
+}
+
+select, select option{
+    color: #05386B;
+    opacity: 0.8;
+}
+
+.custom-file-input {
+    background-color: red;
+}
+
+.example-container {
+    padding: 50px;
+    padding-left: 20%;
+}
