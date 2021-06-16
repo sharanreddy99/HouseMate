@@ -1,0 +1,51 @@
+version: "3.9"
+volumes:
+  frontend-content:
+services:
+    mongo:
+      container_name: housemate_db
+      image: mongo
+      environment:
+        MONGO_INITDB_DATABASE: ${HOUSEMATE_MONGO_DATABASE}
+      ports:
+        - 27017:27017
+
+    mongo-express:
+      container_name: housemate_db_fe
+      image: mongo-express
+      ports:
+        - ${HOUSEMATE_MONGO_FE_PORT}:8081
+      depends_on:
+        - mongo
+
+    angular:
+      volumes:
+        - frontend-content:/app/frontend/dist/
+      container_name: housemate_frontend
+      build: 
+        context: ./frontend
+        
+    node:
+      volumes:
+        - type: bind
+          source: ./backend
+          target: /app/backend
+        - frontend-content:/app/backend/src
+        
+      container_name: housemate_backend
+      build: 
+        context: ./backend
+      ports:
+        - ${HOUSEMATE_NODE_PORT}:${HOUSEMATE_NODE_PORT}
+      depends_on:
+        - mongo-express
+        - angular
+      environment:
+        HOUSEMATE_NODE_PORT: ${HOUSEMATE_NODE_PORT}
+        HOUSEMATE_NODE_EMAIL: ${HOUSEMATE_NODE_EMAIL}
+        HOUSEMATE_NODE_PASSWORD: ${HOUSEMATE_NODE_PASSWORD}
+        HOUSEMATE_NODE_SECRETJWT: ${HOUSEMATE_NODE_SECRETJWT}
+        HOUSEMATE_NODE_MONGOURL: mongodb://mongo:27017/${HOUSEMATE_MONGO_DATABASE}
+        HOUSEMATE_NODE_CLIENT_ID: ${HOUSEMATE_NODE_CLIENT_ID}
+        HOUSEMATE_NODE_CLIENT_SECRET: ${HOUSEMATE_NODE_CLIENT_SECRET}
+        HOUSEMATE_NODE_REFRESH_TOKEN: ${HOUSEMATE_NODE_REFRESH_TOKEN}

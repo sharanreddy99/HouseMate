@@ -37,7 +37,7 @@ userSchema.virtual('items',{
 
 userSchema.methods.generateAuthToken = async function () {
     const user = this
-    const token = jwt.sign({ _id: user._id.toString() }, process.env.SECRETJWT,{expiresIn: '5d'});
+    const token = jwt.sign({ _id: user._id.toString() }, process.env.HOUSEMATE_NODE_SECRETJWT,{expiresIn: '5d'});
 
     user.token = token
     await user.save()

@@ -24,6 +24,9 @@ app.use('/api',emailRouter)
 app.use('/api',itemRouter)
 app.use('/api',reminderRouter)
 
+// app.get('/',(req,res)=>{
+//     res.status(200).send("Hello Sharan Reddy")
+// })
 app.get('*', function(req,res) {
   res.sendFile(path.join(ProjectURL + '/index.html'));
 });

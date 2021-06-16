@@ -7,11 +7,10 @@ let transporter = nodemailer.createTransport({
     secure: true,
     auth: {
         type: 'Oauth2',
-        user: 'sharanreddyfake@gmail.com',
-        clientId: '197090681501-omurpmt53rhpbr0coqqh8smpfdrcfa27.apps.googleusercontent.com',
-        clientSecret: 'vqAyZL5nHYQ-W55TYN263Kae',
-        refreshToken: '1//04aYVQDq46ApZCgYIARAAGAQSNwF-L9IrRMJeVJrqPj6Geopr2ihHa3zu0L37WECmsnW_ASBHyCKMpwipgz0dY6kRQN8xOqumYUE'
-    
+        user: process.env.HOUSEMATE_NODE_EMAIL,
+        clientId: process.env.HOUSEMATE_NODE_CLIENT_ID,
+        clientSecret: process.env.HOUSEMATE_NODE_CLIENT_SECRET,
+        refreshToken: process.env.HOUSEMATE_NODE_REFRESH_TOKEN
     }
 })
 
