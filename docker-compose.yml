@@ -27,9 +27,6 @@ services:
         
     node:
       volumes:
-        - type: bind
-          source: ./backend
-          target: /app/backend
         - frontend-content:/app/backend/src
         
       container_name: housemate_backend
