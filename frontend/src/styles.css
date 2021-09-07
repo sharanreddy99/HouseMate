@@ -1,9 +1,44 @@
 /* You can add global styles to this file, and also import other style files */
 
-html,body {
-    padding: 0%;
-    margin: 0%;
-    background-color: #5CDB95;
-    min-height: 100%;
-    font-family: "Roboto", "Helvetica Neue", "sans-serif";
+html,
+body {
+  padding: 0%;
+  margin: 0%;
+  background-color: #5cdb95;
+  min-height: 100%;
+  font-family: "Roboto", "Helvetica Neue", "sans-serif";
+}
+
+.select2-container--default .select2-selection--multiple {
+  background-color: #edf5e1 !important;
+  color: black !important;
+}
+
+.select2-dropdown {
+  background-color: #edf5e1 !important;
+  color: black !important;
+}
+
+.select2-selection__choice {
+  background-color: #05386b !important;
+  color: white !important;
+}
+
+.select2-selection__choice__remove {
+  color: white !important;
+}
+
+.select2-results__option--highlighted {
+  background-color: #05386b !important;
+  color: white !important;
+}
+
+.select2-container--default .select2-results__option[aria-selected="true"] {
+  background-color: #05386b !important;
+  color: white !important;
+}
+
+.select2-results__message {
+  background-color: #05386b !important;
+  color: white !important;
 }
