@@ -42,3 +42,13 @@ body {
   background-color: #05386b !important;
   color: white !important;
 }
+
+.select2-selection__rendered {
+  background-color: #edf5e1 !important;
+  color: black !important;
+}
+
+.select2-search__field {
+  background-color: #edf5e1 !important;
+  color: #05386b !important;
+}
