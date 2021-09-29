@@ -1,41 +1,63 @@
-import { Injectable } from '@angular/core';
+import { Injectable, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
-import { baseUrl } from './baseUrl';
+import { baseUrl, BASE_AUTH_PATH } from './baseUrl';
 import { User } from './clientuser';
 import { Router } from '@angular/router';
+import { UserService } from './user.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class AuthService {
+  constructor(
+    private http: HttpClient,
+    private router: Router,
+    private userService: UserService
+  ) {}
 
-  private currentUserSubject: BehaviorSubject<User>;
-  public currentUser: Observable<User>;
+  login(signinSettings: any) {
+    return this.http
+      .post(baseUrl + BASE_AUTH_PATH + 'login', signinSettings)
+      .pipe(
+        map((res) => {
+          let user: User = {
+            email: signinSettings.email,
+            password: signinSettings.password,
+            token: res['data']['token'],
+          };
 
-  public get currentUserValue(): User {
-    return this.currentUserSubject.value;
+          localStorage.setItem('access_token', user.token);
+          let encUser = null;
+
+          this.userService.postEncryptData(user).subscribe(
+            (res) => {
+              encUser = res.data;
+              localStorage.setItem('currentUser', encUser);
+              this.router.navigate(['/login']);
+            },
+            (err) => {
+              localStorage.clear();
+            }
+          );
+
+          return null;
+        })
+      );
   }
 
-  constructor(private http: HttpClient,
-    private router: Router) { 
-    this.currentUserSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
-    this.currentUser = this.currentUserSubject.asObservable();
-  }
+  logout() {
+    //TODO need to implement more
+    this.http.get(baseUrl + BASE_AUTH_PATH + 'logout').subscribe(
+      (res) => {
+        localStorage.removeItem('access_token');
 
-  login(signinSettings: any){
-    return this.http.post(baseUrl+'login',signinSettings)
-    .pipe(map((user)=>{
-      localStorage.setItem('currentUser',JSON.stringify(user));
-      this.currentUserSubject.next(<User>user);
-      return user;
-    }))
-  }
-
-  logout(){
-    localStorage.removeItem('currentUser');
-    this.currentUserSubject.next(null);
-    this.router.navigate(['']);
+        this.router.navigate(['']);
+      },
+      (err) => {
+        localStorage.removeItem('access_token');
+      }
+    );
   }
 }

@@ -1,7 +1,9 @@
 export interface SignupSettings {
-    fn: string;
-    ln: string;
-    email: string;
-    pass: string;
-    confpass: string;
+  firstName: string;
+  lastName: string;
+  displayName: string;
+  email: string;
+  mobile: string;
+  password: string;
+  confpass: string;
 }

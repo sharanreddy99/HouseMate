@@ -10,64 +10,56 @@ import { CompleteReminderComponent } from './reminder/complete-reminder.componen
 import { CompleteSummaryComponent } from './summary/complete-summary.component';
 import { CompleteAboutComponent } from './about/complete-about.component';
 import { CompleteStockEstimatorComponent } from './stock-estimator/complete-stock-estimator.component';
-import { AuthGuard } from './services/auth.guard';
-
 
 const routes: Routes = [
   {
     path: '',
+    pathMatch: 'full',
     redirectTo: 'login',
-    pathMatch: 'full'
   },
   {
     path: 'login',
-    component: LoginComponent
+    component: LoginComponent,
   },
   {
     path: 'dashboard',
     component: DashboardComponent,
-    canActivate: [AuthGuard]    
   },
   {
     path: 'profile',
     component: ProfileComponent,
-    canActivate: [AuthGuard]
   },
   {
     path: 'items',
     component: CompleteItemsComponent,
-    canActivate: [AuthGuard]
   },
   {
     path: 'reminder',
     component: CompleteReminderComponent,
-    canActivate: [AuthGuard]
   },
   {
     path: 'summary',
     component: CompleteSummaryComponent,
-    canActivate: [AuthGuard]
   },
   {
     path: 'about',
     component: CompleteAboutComponent,
-    canActivate: [AuthGuard]
   },
   {
     path: 'stockestimator',
     component: CompleteStockEstimatorComponent,
-    canActivate: [AuthGuard]
-  }
+  },
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes,{
-    onSameUrlNavigation: 'reload'
-  })],
+  imports: [
+    RouterModule.forRoot(routes, {
+      onSameUrlNavigation: 'reload',
+    }),
+  ],
   exports: [RouterModule],
   providers: [
-    AuthGuard,
-    { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true }
-  ]
+    { provide: HTTP_INTERCEPTORS, useClass: RequestInterceptor, multi: true },
+  ],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}

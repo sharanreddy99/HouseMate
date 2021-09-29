@@ -9,10 +9,9 @@ import { Router } from '@angular/router';
 @Component({
   selector: 'app-forgotpassword',
   templateUrl: './forgotpassword.component.html',
-  styleUrls: ['../login.component.css']
+  styleUrls: ['../login.component.css'],
 })
-export class ForgotpasswordComponent{
-  
+export class ForgotpasswordComponent {
   modalRef: BsModalRef;
   @ViewChild('template') template: TemplateRef<any>;
 
@@ -20,142 +19,162 @@ export class ForgotpasswordComponent{
   isPassValid: boolean;
   isOTPSent: boolean;
   isOTPVerified: boolean;
-  private _otp = '';
   pass: string = undefined;
   confpass: string = undefined;
   explainpasswordcount: number = 0;
 
   fpSettings: FPSettings = {
     email: undefined,
-    password: undefined
-  }
+    password: undefined,
+  };
 
-  constructor(private userService: UserService,
+  constructor(
+    private userService: UserService,
     private modalService: BsModalService,
-    private router: Router){}
-  
+    private router: Router
+  ) {}
 
   openModal() {
     this.modalRef = this.modalService.show(this.template);
   }
 
-  closeModal(){
+  closeModal() {
     this.modalRef.hide();
+    this.userService.updateLoading('false');
   }
 
-  generateOTP(){
+  generateOTP() {
+    clearTimeout();
+
+    this.userService.updateLoading('true');
+
+    this.userService.generateOTP(this.fpSettings.email).subscribe(
+      (result) => {
+        setTimeout(() => {
+          this.closeModal();
+        }, 3000);
+
+        setTimeout(() => {
+          this.isOTPSent = false;
+        }, 180000);
+
+        this.isOTPSent = true;
+        this.isOTPVerified = undefined;
+
+        this.modalbody = 'OTP has been generated and is valid for 3 minutes.';
+        this.openModal();
+      },
+      (err) => {
+        setTimeout(() => {
+          this.closeModal();
+        }, 3000);
+
+        this.isOTPSent = undefined;
+        this.isOTPVerified = undefined;
+        this.modalbody = 'Generating OTP failed. Try again later.';
+        this.openModal();
+      },
+      () => {
+        this.userService.updateLoading('false');
+      }
+    );
+  }
+
+  validateEmailAndGenerateOTP() {
     clearTimeout();
     this.userService.updateLoading('true');
     this.userService.validEmail(this.fpSettings.email).subscribe(
-      result => {
-        
-        setTimeout(()=>{
-          this.modalRef.hide();
-        },3000);
-        this.modalbody = "OTP has been generated and is valid for 3 minutes.";
-        this.openModal();
-        
-        this.userService.generateOTP(this.fpSettings.email).subscribe(
-          result => {
-            setTimeout(()=>{
-              this._otp = undefined;
-              this.isOTPSent = false;
-            },180000);
-  
-            this._otp = result.otp;
-            this.isOTPSent = true;
-            this.isOTPVerified = null;
-          },
-          error => {
-            
-            setTimeout(()=>{
-              this.modalRef.hide();
-            },3000);
-            
-            
-            this._otp = '';
-            this.isOTPSent = null;
-            this.isOTPVerified = null;
-            this.modalbody = "Generating OTP Failed. Please try again";
-            this.openModal();
-          },
-          ()=>{
-            this.userService.updateLoading('false');
-          }
-        )
-
-      },error => {
-        setTimeout(()=>{
-          this.modalRef.hide();
-        },3000);
-        
-        this.modalbody = error.error.msg;
+      (result) => {
+        this.generateOTP();
+      },
+      (err) => {
+        setTimeout(() => {
+          this.closeModal();
+        }, 3000);
+        this.modalbody = err.error.error;
         this.openModal();
       },
-      ()=>{
+      () => {
         this.userService.updateLoading('false');
       }
-    )
+    );
   }
 
-  verifyOTP(otp: string){
-    if(otp==this._otp){
-      this.isOTPVerified = true;
-    }else
-      this.isOTPVerified = false;
+  verifyOTP(otp: string) {
+    this.userService.updateLoading('true');
+    this.userService.verifyOTP(this.fpSettings.email, otp).subscribe(
+      (result) => {
+        this.isOTPSent = false;
+        this.isOTPVerified = true;
+      },
+      (err) => {
+        setTimeout(() => {
+          this.closeModal();
+        }, 3000);
+
+        this.isOTPVerified = false;
+        this.modalbody = err.error.error;
+        this.openModal();
+      },
+      () => {
+        this.userService.updateLoading('false');
+      }
+    );
   }
 
-  gotoLogin(){
+  gotoLogin() {
     window.location.reload();
   }
 
-  onChangePassword(){
+  onChangePassword() {
     clearTimeout();
-    this.fpSettings.email = this.fpSettings.email === undefined ? '' : this.fpSettings.email;
-    this.fpSettings.password = this.fpSettings.password === undefined ? '' : this.fpSettings.password;
+    this.fpSettings.email =
+      this.fpSettings.email === undefined ? '' : this.fpSettings.email;
+    this.fpSettings.password =
+      this.fpSettings.password === undefined ? '' : this.fpSettings.password;
 
-    let pattern = /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?([^\w\s]|[_])).{8,}$/;
+    let pattern =
+      /^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?([^\w\s]|[_])).{8,}$/;
     this.isPassValid = pattern.test(this.pass);
     this.isPassValid = pattern.test(this.confpass);
-    this.isPassValid = this.isPassValid? this.pass===this.confpass : false;
-  
-    if(this.isPassValid){
+    this.isPassValid = this.isPassValid ? this.pass === this.confpass : false;
+
+    if (this.isPassValid) {
       this.fpSettings.password = this.pass;
       this.userService.updateLoading('true');
       this.userService.postFPForm(this.fpSettings).subscribe(
-        result => {
-          
-          setTimeout(()=>{
-            window.location.reload();
-          },3000);
+        (result) => {
+          setTimeout(() => {
+            this.gotoLogin();
+          }, 3000);
           localStorage.clear();
-          this.modalbody = result.msg;
+          this.modalbody = result.data;
           this.openModal();
         },
-        error  => {
-          
-          setTimeout(()=>{
-            this.modalRef.hide();
-          },3000);
-          this.modalbody = error.error.msg;
-          this.openModal() ; 
-          },
-          ()=>{
-            this.userService.updateLoading('false');
-          }
-        );
+        (err) => {
+          setTimeout(() => {
+            this.closeModal();
+          }, 3000);
+          this.modalbody = err.error.error;
+          this.openModal();
+        },
+        () => {
+          this.userService.updateLoading('false');
+        }
+      );
     }
   }
 
-  explainPassword(){
+  explainPassword() {
     clearTimeout();
-    if(this.explainpasswordcount==0){
-      setTimeout(()=>{
+    if (this.explainpasswordcount == 0) {
+      setTimeout(() => {
         this.modalRef.hide();
-      },10000)
-      this.modalbody = "Password must consist of atleast 1 Uppercase, 1 Lowercase, 1 Digit and 1 special symbol with a min length of 8.";
+      }, 10000);
+      this.modalbody =
+        'Password must consist of atleast 1 Uppercase, 1 Lowercase, 1 Digit and 1 special symbol with a min length of 8.';
       this.openModal();
-      this.explainpasswordcount+=1;
+      this.explainpasswordcount += 1;
     }
   }
 }

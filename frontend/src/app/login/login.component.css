@@ -1,130 +1,131 @@
 /* Colors */
 .bg-maingreen {
-    background-color: #5CDB95;
+  background-color: #5cdb95;
 }
 
 .bg-mainblue {
-    background-color: #05386B;
+  background-color: #05386b;
 }
 
 .bluetext {
-    color: #05386B;
-    font-weight: bold;
+  color: #05386b;
+  font-weight: bold;
 }
 
 /* Buttons */
 .bluebutton {
-    background-color: #05386B;
-    color: #EDF5E1;
+  background-color: #05386b;
+  color: #edf5e1;
 }
 
-
 .bluebutton:hover {
-    background-color: #032342;
+  background-color: #032342;
 }
 
 .bluebutton:disabled {
-    background-color: #05386B;
-    color: white;
-    cursor: not-allowed;
+  background-color: #05386b;
+  color: white;
+  cursor: not-allowed;
 }
 
 /* Main Styles */
 
 .login-background {
-    margin-top: 5%;
-    margin-bottom: 5%;
-    
+  margin-top: 5%;
+  margin-bottom: 5%;
 }
 
-.login-background > div:first-child{
-    height:100%;
+.login-background > div:first-child {
+  height: 100%;
 }
 
- .login-box{
-    background-color: #EDF5E1;
-    border-radius: 20px;   
+.login-box {
+  background-color: #edf5e1;
+  border-radius: 20px;
 }
 
 .login-image {
-    width: 40%;
-    height: 20%;
-    position: relative;
-    left:30%;
-    z-index: 5;
+  width: 40%;
+  height: 20%;
+  position: relative;
+  left: 30%;
+  z-index: 5;
 }
 
-input.invalid-form-control,select.invalid-form-control {
-    background-color: rgb(231, 123, 123);
+input.invalid-form-control,
+select.invalid-form-control {
+  background-color: rgb(231, 123, 123);
 }
 
-::placeholder{
-    color: #05386B;
-    opacity: 0.8;
+::placeholder {
+  color: #05386b;
+  opacity: 0.8;
 }
 
 .form-control {
-    border:none;
-    background-color: #EDF5E1;
-    border: 1px solid #05386B;
+  border: none;
+  background-color: #edf5e1;
+  border: 1px solid #05386b;
 }
 
-.form-control:focus{
+.form-control:focus {
   box-shadow: none;
-  color: #05386B;
+  color: #05386b;
 }
 
-.form-control:disabled{
-    background-color: #d5dace;
+.form-control:disabled {
+  background-color: #d5dace;
 }
 
 .input-group-text {
-    background-color: #05386B;
-    color: white;
-    width: 10em;
+  background-color: #05386b;
+  color: white;
+  width: 10em;
 }
 
 a.forgot-password {
-    color: #05386B;
+  color: #05386b;
 }
-a.forgot-password:hover{
-    text-decoration: underline;
-    color: #05386B;
-    cursor: pointer;
+a.forgot-password:hover {
+  text-decoration: underline;
+  color: #05386b;
+  cursor: pointer;
 }
-
 
 input::selection {
-    background-color: #05386B;
-    color: #EDF5E1;
+  background-color: #05386b;
+  color: #edf5e1;
 }
 
 .custom-select {
-    background-color: #EDF5E0;
+  background-color: #edf5e0;
 }
-
 
 /* Slider Custom Colors */
-:host >>> .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-bar {
-    background-color: #379683;
+:host
+  >>> .mat-slide-toggle.mat-checked:not(.mat-disabled)
+  .mat-slide-toggle-bar {
+  background-color: #379683;
 }
 
-:host >>> .mat-slide-toggle.mat-checked:not(.mat-disabled) .mat-slide-toggle-thumb {
-    background-color: #05386B;
+:host
+  >>> .mat-slide-toggle.mat-checked:not(.mat-disabled)
+  .mat-slide-toggle-thumb {
+  background-color: #05386b;
 }
 
 :host >>> .mat-slide-toggle-bar {
-    background-color: #379683;
+  background-color: #379683;
 }
 
 :host >>> .mat-slide-toggle-thumb {
-    background-color: #05386B;
+  background-color: #05386b;
 }
 
 /*  Font Awesome Icons */
-.fas { 
-    position:relative;
-    top:10px;
-    transform: scale(1.5,1.5);
-    color: #05386B;
+.fas {
+  position: relative;
+  top: 10px;
+  transform: scale(1.5, 1.5);
+  color: #05386b;
 }

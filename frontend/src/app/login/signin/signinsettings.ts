@@ -1,4 +1,4 @@
-export interface SigninSettings{
-    email: string;
-    password: string;
+export interface SigninSettings {
+  email: string;
+  password: string;
 }

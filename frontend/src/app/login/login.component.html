@@ -1,22 +1,38 @@
-<div class="contasd" style="width: 100vw;height: 100vh;" [ngClass]="isLoading$? 'd-block' : 'd-none'">
-    <app-loading></app-loading>
+<div
+  class="contasd"
+  style="width: 100vw; height: 100vh"
+  [ngClass]="isLoading$ ? 'd-block' : 'd-none'"
+>
+  <app-loading></app-loading>
 </div>
 
-<div class="container-fluid login-background bg-maingreen" [ngClass]="!isLoading$? 'd-block' : 'd-none'">
-    <div class="row justify-content-center align-items-center">
-        <div class="col-10 col-md-5 p-0 m-0 pb-2 login-box" [hidden]="isForgotPassword">
-            
-            <img src="/assets/img/profile.png" class="login-image">
+<div
+  class="container-fluid login-background bg-maingreen"
+  [ngClass]="!isLoading$ ? 'd-block' : 'd-none'"
+>
+  <div class="row justify-content-center align-items-center">
+    <div
+      class="col-10 col-md-5 p-0 m-0 pb-2 login-box"
+      [hidden]="isForgotPassword"
+    >
+      <img src="/assets/img/profile.png" class="login-image" />
 
-            <app-signin *ngIf = "!switch.checked " (notify)="onForgotPassword()"></app-signin>
-            <app-signup *ngIf = "switch.checked "></app-signup>
-            <hr>
-            <h5 class="offset-2 offset-md-3 d-inline bluetext">Signin</h5> &nbsp;
-            <mat-slide-toggle [(ngModel)]="checked" #switch></mat-slide-toggle> &nbsp;
-            <h5 class=" d-inline bluetext">Signup</h5>
-        </div>
-        <div class="col-10 col-md-5 p-0 m-0 pb-2 login-box" [hidden]="!isForgotPassword">
-            <app-forgotpassword></app-forgotpassword>
-        </div>
+      <app-signin
+        *ngIf="!switch.checked"
+        (notify)="onForgotPassword()"
+      ></app-signin>
+      <app-signup *ngIf="switch.checked"></app-signup>
+      <hr />
+      <h5 class="offset-2 offset-md-3 d-inline bluetext">Signin</h5>
+      &nbsp;
+      <mat-slide-toggle [(ngModel)]="checked" #switch></mat-slide-toggle> &nbsp;
+      <h5 class="d-inline bluetext">Signup</h5>
     </div>
+    <div
+      class="col-10 col-md-5 p-0 m-0 pb-2 login-box"
+      [hidden]="!isForgotPassword"
+    >
+      <app-forgotpassword></app-forgotpassword>
+    </div>
+  </div>
 </div>

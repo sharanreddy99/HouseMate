@@ -11,19 +11,21 @@ import { ForgotpasswordComponent } from './forgotpassword/forgotpassword.compone
 import { FeaturesModule } from '../features/features.module';
 import { HttpClientModule } from '@angular/common/http';
 
-
 @NgModule({
-  declarations: [LoginComponent, SigninComponent, SignupComponent, ForgotpasswordComponent],
+  declarations: [
+    LoginComponent,
+    SigninComponent,
+    SignupComponent,
+    ForgotpasswordComponent,
+  ],
   imports: [
     CommonModule,
     MatSlideToggleModule,
     FormsModule,
     ModalModule.forRoot(),
     HttpClientModule,
-    FeaturesModule
+    FeaturesModule,
   ],
-  exports: [
-    LoginComponent
-  ]
+  exports: [LoginComponent],
 })
-export class LoginModule { }
+export class LoginModule {}
