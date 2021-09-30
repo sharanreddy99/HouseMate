@@ -142,11 +142,17 @@ export class ProfileComponent implements OnInit {
     let pattern = /[\w-]+@([\w-]+\.)+[\w-]+/i;
     this.isEmailValid = pattern.test(this.newProfileSettings.email);
 
-    if (this.isEmailValid) {
+    if (
+      this.isEmailValid &&
+      this.profileSettings.email == this.newProfileSettings.email
+    ) {
       this.isLoading$ = true;
-
-      this.userService.validEmail(this.newProfileSettings.email).subscribe(
-        (result) => {
+      this.generateOTP();
+      this.isLoading$ = false;
+    } else {
+      this.isLoading$ = true;
+      this.userService.isNewEmail(this.newProfileSettings.email).subscribe(
+        (res) => {
           this.isLoading$ = false;
           this.generateOTP();
         },
@@ -156,7 +162,7 @@ export class ProfileComponent implements OnInit {
             this.closeModal();
           }, 3000);
 
-          this.isOTPVerified = false;
+          this.isOTPVerified = undefined;
           this.modalbody = err.error.error;
           this.openModal();
         }

@@ -57,6 +57,10 @@ export class UserService {
     );
   }
 
+  isNewEmail(email: string): Observable<any> {
+    return this.http.get(baseUrl + BASE_AUTH_PATH + 'new/email?email=' + email);
+  }
+
   getUserDetails(): Observable<any> {
     return this.http.get(baseUrl + BASE_AUTH_PATH + 'user');
   }

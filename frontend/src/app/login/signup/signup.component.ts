@@ -56,35 +56,49 @@ export class SignupComponent implements OnInit {
     this.isEmailValid = pattern.test(this.signupSettings.email);
     if (this.isEmailValid) {
       this.userService.updateLoading('true');
+      this.userService.isNewEmail(this.signupSettings.email).subscribe(
+        (res) => {
+          this.userService.generateOTP(this.signupSettings.email).subscribe(
+            (result) => {
+              this.userService.updateLoading('false');
+              setTimeout(() => {
+                this.closeModal();
+              }, 3000);
 
-      this.userService.generateOTP(this.signupSettings.email).subscribe(
-        (result) => {
-          setTimeout(() => {
-            this.closeModal();
-          }, 3000);
+              setTimeout(() => {
+                this.isOTPSent = false;
+              }, 180000);
 
-          setTimeout(() => {
-            this.isOTPSent = false;
-          }, 180000);
+              this.isOTPSent = true;
+              this.isOTPVerified = undefined;
 
-          this.isOTPSent = true;
-          this.isOTPVerified = undefined;
+              this.modalbody =
+                'OTP has been generated and is valid for 3 minutes.';
+              this.openModal();
+            },
+            (e) => {
+              this.userService.updateLoading('false');
+              setTimeout(() => {
+                this.closeModal();
+              }, 3000);
 
-          this.modalbody = 'OTP has been generated and is valid for 3 minutes.';
-          this.openModal();
+              this.isOTPSent = undefined;
+              this.isOTPVerified = undefined;
+              this.modalbody = 'Generating OTP failed. Try again later.';
+              this.openModal();
+            }
+          );
         },
         (err) => {
+          this.userService.updateLoading('false');
           setTimeout(() => {
             this.closeModal();
           }, 3000);
 
           this.isOTPSent = undefined;
           this.isOTPVerified = undefined;
-          this.modalbody = 'Generating OTP failed. Try again later.';
+          this.modalbody = err.error.error;
           this.openModal();
-        },
-        () => {
-          this.userService.updateLoading('false');
         }
       );
     }
