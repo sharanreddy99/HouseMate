@@ -30,8 +30,7 @@ export class ForgotpasswordComponent {
 
   constructor(
     private userService: UserService,
-    private modalService: BsModalService,
-    private router: Router
+    private modalService: BsModalService
   ) {}
 
   openModal() {
@@ -40,23 +39,16 @@ export class ForgotpasswordComponent {
 
   closeModal() {
     this.modalRef.hide();
-    this.userService.updateLoading('false');
   }
 
   generateOTP() {
     clearTimeout();
-
-    this.userService.updateLoading('true');
-
     this.userService.generateOTP(this.fpSettings.email).subscribe(
       (result) => {
+        this.userService.updateLoading('false');
         setTimeout(() => {
           this.closeModal();
         }, 3000);
-
-        setTimeout(() => {
-          this.isOTPSent = false;
-        }, 180000);
 
         this.isOTPSent = true;
         this.isOTPVerified = undefined;
@@ -73,9 +65,6 @@ export class ForgotpasswordComponent {
         this.isOTPVerified = undefined;
         this.modalbody = 'Generating OTP failed. Try again later.';
         this.openModal();
-      },
-      () => {
-        this.userService.updateLoading('false');
       }
     );
   }
@@ -88,14 +77,12 @@ export class ForgotpasswordComponent {
         this.generateOTP();
       },
       (err) => {
+        this.userService.updateLoading('false');
         setTimeout(() => {
           this.closeModal();
         }, 3000);
         this.modalbody = err.error.error;
         this.openModal();
-      },
-      () => {
-        this.userService.updateLoading('false');
       }
     );
   }
@@ -104,10 +91,11 @@ export class ForgotpasswordComponent {
     this.userService.updateLoading('true');
     this.userService.verifyOTP(this.fpSettings.email, otp).subscribe(
       (result) => {
-        this.isOTPSent = false;
+        this.userService.updateLoading('false');
         this.isOTPVerified = true;
       },
       (err) => {
+        this.userService.updateLoading('false');
         setTimeout(() => {
           this.closeModal();
         }, 3000);
@@ -115,9 +103,6 @@ export class ForgotpasswordComponent {
         this.isOTPVerified = false;
         this.modalbody = err.error.error;
         this.openModal();
-      },
-      () => {
-        this.userService.updateLoading('false');
       }
     );
   }
@@ -144,22 +129,20 @@ export class ForgotpasswordComponent {
       this.userService.updateLoading('true');
       this.userService.postFPForm(this.fpSettings).subscribe(
         (result) => {
+          this.userService.updateLoading('false');
           setTimeout(() => {
             this.gotoLogin();
           }, 3000);
-          localStorage.clear();
           this.modalbody = result.data;
           this.openModal();
         },
         (err) => {
+          this.userService.updateLoading('false');
           setTimeout(() => {
             this.closeModal();
           }, 3000);
           this.modalbody = err.error.error;
           this.openModal();
-        },
-        () => {
-          this.userService.updateLoading('false');
         }
       );
     }

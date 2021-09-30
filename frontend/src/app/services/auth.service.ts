@@ -35,7 +35,6 @@ export class AuthService {
             (res) => {
               encUser = res.data;
               localStorage.setItem('currentUser', encUser);
-              this.router.navigate(['/login']);
             },
             (err) => {
               localStorage.clear();

@@ -99,7 +99,7 @@
           type="button"
           name="verifyotp"
           class="btn btn-lg btn-block bluebutton"
-          [disabled]="!isOTPSent"
+          [disabled]="!isOTPSent || (isOTPSent && isOTPVerified)"
           (click)="verifyOTP(otp.value)"
         >
           <b>Verify OTP</b>

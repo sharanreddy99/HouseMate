@@ -46,7 +46,6 @@ export class SignupComponent implements OnInit {
 
   closeModal() {
     this.modalRef.hide();
-    this.userService.updateLoading('false');
   }
 
   generateOTP() {
@@ -64,10 +63,6 @@ export class SignupComponent implements OnInit {
               setTimeout(() => {
                 this.closeModal();
               }, 3000);
-
-              setTimeout(() => {
-                this.isOTPSent = false;
-              }, 180000);
 
               this.isOTPSent = true;
               this.isOTPVerified = undefined;
@@ -108,10 +103,11 @@ export class SignupComponent implements OnInit {
     this.userService.updateLoading('true');
     this.userService.verifyOTP(this.signupSettings.email, otp).subscribe(
       (result) => {
-        this.isOTPSent = false;
+        this.userService.updateLoading('false');
         this.isOTPVerified = true;
       },
       (err) => {
+        this.userService.updateLoading('false');
         setTimeout(() => {
           this.closeModal();
         }, 3000);
@@ -119,9 +115,6 @@ export class SignupComponent implements OnInit {
         this.isOTPVerified = false;
         this.modalbody = err.error.error;
         this.openModal();
-      },
-      () => {
-        this.userService.updateLoading('false');
       }
     );
   }
@@ -188,6 +181,7 @@ export class SignupComponent implements OnInit {
 
       this.userService.postSignupForm(this.signupSettings).subscribe(
         (result) => {
+          this.userService.updateLoading('false');
           setTimeout(() => {
             window.location.reload();
           }, 3000);
@@ -195,14 +189,12 @@ export class SignupComponent implements OnInit {
           this.openModal();
         },
         (err) => {
+          this.userService.updateLoading('false');
           setTimeout(() => {
             this.closeModal();
           }, 3000);
           this.modalbody = err.error.error;
           this.openModal();
-        },
-        () => {
-          this.userService.updateLoading('false');
         }
       );
     }
