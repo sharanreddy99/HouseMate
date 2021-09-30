@@ -47,15 +47,14 @@ export class AuthService {
   }
 
   logout() {
-    //TODO need to implement more
     this.http.get(baseUrl + BASE_AUTH_PATH + 'logout').subscribe(
       (res) => {
         localStorage.removeItem('access_token');
-
         this.router.navigate(['']);
       },
       (err) => {
         localStorage.removeItem('access_token');
+        this.router.navigate(['']);
       }
     );
   }

@@ -8,21 +8,15 @@ declare var $: any;
 @Component({
   selector: 'app-items',
   templateUrl: './items.component.html',
-  styleUrls: ['./items.component.css']
+  styleUrls: ['./items.component.css'],
 })
 export class ItemsComponent implements OnInit {
-  
-  itemAvailable:boolean = false;
+  itemAvailable: boolean = false;
 
-  categoryOptions = [
-    {id: 0, text: 'Select a Category'},
-  ];
+  categoryOptions = [{ id: 0, text: 'Select a Category' }];
 
-  itemOptions = [
-    {id: 0, text: 'Select an Item'},
-  ];
+  itemOptions = [{ id: 0, text: 'Select an Item' }];
 
-  
   itemSettings: ItemSettings = {
     category: undefined,
     name: undefined,
@@ -31,7 +25,7 @@ export class ItemsComponent implements OnInit {
     stockcount: undefined,
     price: undefined,
     notify: 'choose',
-    utilizationTime:undefined,
+    utilizationTime: undefined,
     utilizationQuantity: undefined,
     utilizationUnits: 'choose',
     description: undefined,
@@ -39,128 +33,144 @@ export class ItemsComponent implements OnInit {
     totalstock: {
       amount: undefined,
       units: undefined,
-      daysleft: undefined
-    }
+      daysleft: undefined,
+    },
   };
 
-  constructor(private router: Router,
+  constructor(
+    private router: Router,
     private itemService: ItemService,
-    private subloadingService: SubloadingService) { }
+    private subloadingService: SubloadingService
+  ) {}
 
   ngOnInit(): void {
-  
     this.itemAvailable = false;
-    
+
     $('.category-select').select2({
-      data: this.categoryOptions
-    });
-    
-    $('.item-select').select2({
-      data: this.itemOptions
+      data: this.categoryOptions,
     });
 
-    $(document).ready(()=> {
+    $('.item-select').select2({
+      data: this.itemOptions,
+    });
+
+    $(document).ready(() => {
       this.subloadingService.updateLoadingItems('true');
 
-      this.itemService.postGetCategory(localStorage.getItem('email'),localStorage.getItem('password')).subscribe(
-        result => {
-          
-         this.subloadingService.updateLoadingItems('false');
-
-          this.itemAvailable = false;
-
-          this.categoryOptions = [{id: 0, text: 'Select a Category'}];
-          this.categoryOptions = this.categoryOptions.concat(result);  
-          
-          $('.category-select').select2({
-            data: this.categoryOptions
-          });
-
-          let id = localStorage.getItem('categoryid');
-          if(id && parseInt(id)<this.categoryOptions.length){
-            $('.category-select').val(id).trigger('change').trigger({type: 'select2:selecting'});
-          }
-        },
-        error => {
-        
-        this.subloadingService.updateLoadingItems('false');
-        this.router.navigate(['dashboard'])
-        }
-      )
-    });
-    
-    $('.category-select').on('select2:selecting',(e)=>{
-      if(e && e.params && e.params.args && e.params.args.data){
-        localStorage.setItem('categoryid',e.params.args.data.id);
-        localStorage.setItem('category',e.params.args.data.text);
-      }
-        
-        this.subloadingService.updateLoadingItems('true');
-        this.itemService.postGetItem(localStorage.getItem('category'),localStorage.getItem('email'),localStorage.getItem('password')).subscribe(
-          result => {
-            
+      this.itemService
+        .postGetCategory(
+          localStorage.getItem('email'),
+          localStorage.getItem('password')
+        )
+        .subscribe(
+          (result) => {
             this.subloadingService.updateLoadingItems('false');
+
             this.itemAvailable = false;
-            this.itemOptions = [{id: 0, text: 'Select an Item'}]
-            this.itemOptions = this.itemOptions.concat(result); 
-               
-            $('.item-select').empty();
-            $('.item-select').select2({
-              data: this.itemOptions
+
+            this.categoryOptions = [{ id: 0, text: 'Select a Category' }];
+            this.categoryOptions = this.categoryOptions.concat(result);
+
+            $('.category-select').select2({
+              data: this.categoryOptions,
             });
 
-            
-          let id = localStorage.getItem('nameid');
-          if(id && parseInt(id)<this.itemOptions.length){
-            $('.item-select').val(id).trigger('change').trigger({type: 'select2:selecting'});
-            this.itemAvailable = true;
-          }
+            let id = localStorage.getItem('categoryid');
+            if (id && parseInt(id) < this.categoryOptions.length) {
+              $('.category-select')
+                .val(id)
+                .trigger('change')
+                .trigger({ type: 'select2:selecting' });
+            }
           },
-          error => {
+          (error) => {
             this.subloadingService.updateLoadingItems('false');
-            this.router.navigate(['dashboard']);
           }
-        )
-      });
-    
-    $('.item-select').on('select2:selecting',(e)=>{
-        if(e && e.params && e.params.args && e.params.args.data){
-          localStorage.setItem('nameid',e.params.args.data.id);
-          localStorage.setItem('name',e.params.args.data.text);
-        }
-        this.itemAvailable = true;
+        );
+    });
 
-        let category = localStorage.getItem('category');
-        let name = localStorage.getItem('name')
-        
-        this.subloadingService.updateLoadingItems('true');
-        this.itemService.getCurrentItemDetails(category,name,localStorage.getItem('email'),localStorage.getItem('password')).subscribe(
-          result => {
-            
+    $('.category-select').on('select2:selecting', (e) => {
+      if (e && e.params && e.params.args && e.params.args.data) {
+        localStorage.setItem('categoryid', e.params.args.data.id);
+        localStorage.setItem('category', e.params.args.data.text);
+      }
+
+      this.subloadingService.updateLoadingItems('true');
+      this.itemService
+        .postGetItem(
+          localStorage.getItem('category'),
+          localStorage.getItem('email'),
+          localStorage.getItem('password')
+        )
+        .subscribe(
+          (result) => {
+            this.subloadingService.updateLoadingItems('false');
+            this.itemAvailable = false;
+            this.itemOptions = [{ id: 0, text: 'Select an Item' }];
+            this.itemOptions = this.itemOptions.concat(result);
+
+            $('.item-select').empty();
+            $('.item-select').select2({
+              data: this.itemOptions,
+            });
+
+            let id = localStorage.getItem('nameid');
+            if (id && parseInt(id) < this.itemOptions.length) {
+              $('.item-select')
+                .val(id)
+                .trigger('change')
+                .trigger({ type: 'select2:selecting' });
+              this.itemAvailable = true;
+            }
+          },
+          (error) => {
+            this.subloadingService.updateLoadingItems('false');
+          }
+        );
+    });
+
+    $('.item-select').on('select2:selecting', (e) => {
+      if (e && e.params && e.params.args && e.params.args.data) {
+        localStorage.setItem('nameid', e.params.args.data.id);
+        localStorage.setItem('name', e.params.args.data.text);
+      }
+      this.itemAvailable = true;
+
+      let category = localStorage.getItem('category');
+      let name = localStorage.getItem('name');
+
+      this.subloadingService.updateLoadingItems('true');
+      this.itemService
+        .getCurrentItemDetails(
+          category,
+          name,
+          localStorage.getItem('email'),
+          localStorage.getItem('password')
+        )
+        .subscribe(
+          (result) => {
             this.subloadingService.updateLoadingItems('false');
             this.itemSettings = result;
-          },error => {
+          },
+          (error) => {
             this.subloadingService.updateLoadingItems('false');
-            this.router.navigate(['dashboard'])
           }
-        )
+        );
     });
-    
   }
 
-  openEditItem(){
-    let category = $('.category-select').select2('data')[0].text
-    let name = $('.item-select').select2('data')[0].text
-    let categoryid = $('.category-select').select2('data')[0].id
-    let nameid = $('.item-select').select2('data')[0].id
-    
-    localStorage.setItem('category',category);
-    localStorage.setItem('name',name);
+  openEditItem() {
+    let category = $('.category-select').select2('data')[0].text;
+    let name = $('.item-select').select2('data')[0].text;
+    let categoryid = $('.category-select').select2('data')[0].id;
+    let nameid = $('.item-select').select2('data')[0].id;
 
-    localStorage.setItem('categoryid',categoryid);
-    localStorage.setItem('nameid',nameid);
+    localStorage.setItem('category', category);
+    localStorage.setItem('name', name);
 
-    this.router.navigate(['items','edititem'])
+    localStorage.setItem('categoryid', categoryid);
+    localStorage.setItem('nameid', nameid);
+
+    this.router.navigate(['items', 'edititem']);
   }
-
 }

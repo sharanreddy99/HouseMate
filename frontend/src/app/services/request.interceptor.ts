@@ -39,16 +39,9 @@ export class RequestInterceptor implements HttpInterceptor {
     return next.handle(newrequest).pipe(
       catchError((err) => {
         if (err.status == 401) {
-          this.userService.updateLoading('false');
-          if (newrequest.url.includes('login')) {
-            return throwError(err);
-          } else if (!newrequest.url.includes('logout')) {
+          if (!newrequest.url.includes('logout')) {
             this.authService.logout();
-          } else {
-            localStorage.removeItem('access_token');
-            this.router.navigate(['']);
           }
-          return of(null);
         }
 
         return throwError(err);

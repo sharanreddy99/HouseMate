@@ -6,28 +6,34 @@ declare var $: any;
 @Component({
   selector: 'app-reminder',
   templateUrl: './reminder.component.html',
-  styleUrls: ['./reminder.component.css']
+  styleUrls: ['./reminder.component.css'],
 })
-export class ReminderComponent implements OnInit{
+export class ReminderComponent implements OnInit {
+  reminders = [];
 
-  reminders = []
-
-  constructor(private reminderService: ReminderService,
-    private subloadingService: SubloadingService) { }
+  constructor(
+    private reminderService: ReminderService,
+    private subloadingService: SubloadingService
+  ) {}
 
   ngOnInit(): void {
     this.subloadingService.updateLoadingReminder('true');
-    this.reminderService.postGetAllReminders(localStorage.getItem('email'),localStorage.getItem('password')).subscribe(
-      result => {
-        this.subloadingService.updateLoadingReminder('false');
-        this.reminders = result
-        for(let i=0;i<this.reminders.length;i++){
-          this.reminders[i].id = i;
+    this.reminderService
+      .postGetAllReminders(
+        localStorage.getItem('email'),
+        localStorage.getItem('password')
+      )
+      .subscribe(
+        (result) => {
+          this.subloadingService.updateLoadingReminder('false');
+          this.reminders = result;
+          for (let i = 0; i < this.reminders.length; i++) {
+            this.reminders[i].id = i;
+          }
+        },
+        (err) => {
+          this.subloadingService.updateLoadingReminder('false');
         }
-      },
-      err => {
-        this.subloadingService.updateLoadingReminder('false');
-      }
-    );
+      );
   }
 }

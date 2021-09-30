@@ -44,11 +44,11 @@ export class SigninComponent implements OnInit {
   ngOnInit() {
     this.returnUrl =
       this.route.snapshot.queryParams['returnUrl'] || '/dashboard';
+    this.userService.updateLoading('true');
     if (
       localStorage.getItem('access_token') &&
       localStorage.getItem('currentUser')
     ) {
-      this.userService.updateLoading('true');
       this.userService.getUserDetails().subscribe(
         (res) => {
           let userDetails = res.data;
@@ -102,6 +102,7 @@ export class SigninComponent implements OnInit {
         localStorage.clear();
         this.signinSettings.email = undefined;
         this.signinSettings.password = undefined;
+        this.rememberme = false;
         this.userService.updateLoading('false');
         this.openModal();
       }

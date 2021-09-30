@@ -58,17 +58,20 @@ export class SummaryComponent implements OnInit {
         localStorage.getItem('email'),
         localStorage.getItem('password')
       )
-      .subscribe((result) => {
-        this.subloadingService.updateLoadingSummary('false');
-        this.categoryOptions = [{ id: 0, text: 'ALl Items' }];
-        this.categoryOptions = this.categoryOptions.concat(
-          result['selectdata']
-        );
-        $('.category-select').select2({
-          data: this.categoryOptions,
-        });
-        this.getAllItems();
-      });
+      .subscribe(
+        (result) => {
+          this.subloadingService.updateLoadingSummary('false');
+          this.categoryOptions = [{ id: 0, text: 'ALl Items' }];
+          this.categoryOptions = this.categoryOptions.concat(
+            result['selectdata']
+          );
+          $('.category-select').select2({
+            data: this.categoryOptions,
+          });
+          this.getAllItems();
+        },
+        (err) => {}
+      );
   }
 
   random_rgba() {
@@ -82,51 +85,54 @@ export class SummaryComponent implements OnInit {
         localStorage.getItem('email'),
         localStorage.getItem('password')
       )
-      .subscribe((result) => {
-        this.subloadingService.updateLoadingSummary('false');
-        this.categoryOptions = [{ id: 0, text: 'All Items' }];
-        this.categoryOptions = this.categoryOptions.concat(
-          result['selectdata']
-        );
-        $('.category-select').select2({
-          data: this.categoryOptions,
-        });
+      .subscribe(
+        (result) => {
+          this.subloadingService.updateLoadingSummary('false');
+          this.categoryOptions = [{ id: 0, text: 'All Items' }];
+          this.categoryOptions = this.categoryOptions.concat(
+            result['selectdata']
+          );
+          $('.category-select').select2({
+            data: this.categoryOptions,
+          });
 
-        if (!this.colors) {
-          this.colors = {};
-          for (var i = 1; i < this.categoryOptions.length; i++) {
-            this.colors[this.categoryOptions[i].text] = this.random_rgba();
+          if (!this.colors) {
+            this.colors = {};
+            for (var i = 1; i < this.categoryOptions.length; i++) {
+              this.colors[this.categoryOptions[i].text] = this.random_rgba();
+            }
           }
-        }
 
-        result['estimatedstock'].sort((a, b) =>
-          a.category.localeCompare(b.category)
-        );
-
-        this.multi = [];
-        this.colorScheme = { domain: [] };
-
-        for (let i = 0; i < result['estimatedstock'].length; i++) {
-          this.multi[i] = {};
-          this.multi[i]['name'] = result['estimatedstock'][i].name;
-          this.multi[i]['value'] = parseInt(
-            '' + result['estimatedstock'][i].stockcount
+          result['estimatedstock'].sort((a, b) =>
+            a.category.localeCompare(b.category)
           );
-          this.multi[i]['extra'] = {};
-          this.multi[i]['extra']['category'] =
-            result['estimatedstock'][i].category;
-          this.multi[i]['extra']['nextreqdate'] =
-            result['estimatedstock'][i].nextreqdate;
-          this.colorScheme.domain.push(
-            this.colors[result['estimatedstock'][i].category]
-          );
-        }
 
-        this.view = [60 * result['estimatedstock'].length, 500];
-        if (this.view[0] < 200) {
-          this.view[0] = 200;
-        }
-        this.yAxisLabel = 'Stock Count for All Items';
-      });
+          this.multi = [];
+          this.colorScheme = { domain: [] };
+
+          for (let i = 0; i < result['estimatedstock'].length; i++) {
+            this.multi[i] = {};
+            this.multi[i]['name'] = result['estimatedstock'][i].name;
+            this.multi[i]['value'] = parseInt(
+              '' + result['estimatedstock'][i].stockcount
+            );
+            this.multi[i]['extra'] = {};
+            this.multi[i]['extra']['category'] =
+              result['estimatedstock'][i].category;
+            this.multi[i]['extra']['nextreqdate'] =
+              result['estimatedstock'][i].nextreqdate;
+            this.colorScheme.domain.push(
+              this.colors[result['estimatedstock'][i].category]
+            );
+          }
+
+          this.view = [60 * result['estimatedstock'].length, 500];
+          if (this.view[0] < 200) {
+            this.view[0] = 200;
+          }
+          this.yAxisLabel = 'Stock Count for All Items';
+        },
+        (err) => {}
+      );
   }
 }
