@@ -70,7 +70,6 @@ export class ForgotpasswordComponent {
   }
 
   validateEmailAndGenerateOTP() {
-    clearTimeout();
     this.userService.updateLoading('true');
     this.userService.validEmail(this.fpSettings.email).subscribe(
       (result) => {
@@ -88,6 +87,7 @@ export class ForgotpasswordComponent {
   }
 
   verifyOTP(otp: string) {
+    clearTimeout();
     this.userService.updateLoading('true');
     this.userService.verifyOTP(this.fpSettings.email, otp).subscribe(
       (result) => {
@@ -99,6 +99,10 @@ export class ForgotpasswordComponent {
         setTimeout(() => {
           this.closeModal();
         }, 3000);
+
+        if (err.error.code == 500) {
+          this.isOTPSent = undefined;
+        }
 
         this.isOTPVerified = false;
         this.modalbody = err.error.error;

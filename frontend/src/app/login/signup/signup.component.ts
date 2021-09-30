@@ -50,10 +50,7 @@ export class SignupComponent implements OnInit {
 
   generateOTP() {
     clearTimeout();
-
-    let pattern = /[\w-]+@([\w-]+\.)+[\w-]+/i;
-    this.isEmailValid = pattern.test(this.signupSettings.email);
-    if (this.isEmailValid) {
+    if (this.validateFields()) {
       this.userService.updateLoading('true');
       this.userService.isNewEmail(this.signupSettings.email).subscribe(
         (res) => {
@@ -100,6 +97,7 @@ export class SignupComponent implements OnInit {
   }
 
   verifyOTP(otp: string) {
+    clearTimeout();
     this.userService.updateLoading('true');
     this.userService.verifyOTP(this.signupSettings.email, otp).subscribe(
       (result) => {
@@ -112,6 +110,10 @@ export class SignupComponent implements OnInit {
           this.closeModal();
         }, 3000);
 
+        if (err.error.code == 500) {
+          this.isOTPSent = undefined;
+        }
+
         this.isOTPVerified = false;
         this.modalbody = err.error.error;
         this.openModal();
@@ -120,7 +122,6 @@ export class SignupComponent implements OnInit {
   }
 
   explainPassword() {
-    clearTimeout();
     if (this.explainpasswordcount == 0) {
       setTimeout(() => {
         this.closeModal();
@@ -132,9 +133,7 @@ export class SignupComponent implements OnInit {
     }
   }
 
-  onSignupSubmit() {
-    clearTimeout();
-
+  validateFields() {
     this.signupSettings.firstName =
       this.signupSettings.firstName === undefined
         ? ''
@@ -171,32 +170,32 @@ export class SignupComponent implements OnInit {
       ? this.signupSettings.password === this.signupSettings.confpass
       : false;
 
-    if (
-      this.isFNValid &&
-      this.isLNValid &&
-      this.isEmailValid &&
-      this.isPassValid
-    ) {
-      this.userService.updateLoading('true');
+    return (
+      this.isFNValid && this.isLNValid && this.isEmailValid && this.isPassValid
+    );
+  }
 
-      this.userService.postSignupForm(this.signupSettings).subscribe(
-        (result) => {
-          this.userService.updateLoading('false');
-          setTimeout(() => {
-            window.location.reload();
-          }, 3000);
-          this.modalbody = result.data;
-          this.openModal();
-        },
-        (err) => {
-          this.userService.updateLoading('false');
-          setTimeout(() => {
-            this.closeModal();
-          }, 3000);
-          this.modalbody = err.error.error;
-          this.openModal();
-        }
-      );
-    }
+  onSignupSubmit() {
+    clearTimeout();
+    this.userService.updateLoading('true');
+
+    this.userService.postSignupForm(this.signupSettings).subscribe(
+      (result) => {
+        this.userService.updateLoading('false');
+        setTimeout(() => {
+          window.location.reload();
+        }, 3000);
+        this.modalbody = result.data;
+        this.openModal();
+      },
+      (err) => {
+        this.userService.updateLoading('false');
+        setTimeout(() => {
+          this.closeModal();
+        }, 3000);
+        this.modalbody = err.error.error;
+        this.openModal();
+      }
+    );
   }
 }

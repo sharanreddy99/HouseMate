@@ -10,6 +10,7 @@
         class="form-control"
         [ngClass]="isFNValid === false ? 'invalid-form-control' : null"
         placeholder="Enter First Name"
+        [disabled]="isOTPSent"
         [(ngModel)]="signupSettings.firstName"
       />
     </div>
@@ -23,6 +24,7 @@
         type="text"
         class="form-control"
         [ngClass]="isLNValid === false ? 'invalid-form-control' : null"
+        [disabled]="isOTPSent"
         placeholder="Enter Last Name"
         [(ngModel)]="signupSettings.lastName"
       />
@@ -35,7 +37,7 @@
         name="email"
         type="email"
         [ngClass]="isEmailValid === false ? 'invalid-form-control' : null"
-        [disabled]="isOTPSent && isOTPVerified"
+        [disabled]="isOTPSent"
         class="form-control"
         placeholder="Enter Email"
         [(ngModel)]="signupSettings.email"
@@ -50,6 +52,7 @@
         type="password"
         (click)="explainPassword()"
         [ngClass]="isPassValid === false ? 'invalid-form-control' : null"
+        [disabled]="isOTPSent"
         class="form-control"
         placeholder="Enter Password"
         [(ngModel)]="signupSettings.password"
@@ -64,6 +67,7 @@
         [ngClass]="isPassValid === false ? 'invalid-form-control' : null"
         type="password"
         class="form-control"
+        [disabled]="isOTPSent"
         placeholder="Enter Password Again"
         [(ngModel)]="signupSettings.confpass"
       />
@@ -90,6 +94,7 @@
           name="sendotp"
           class="btn btn-lg btn-block bluebutton"
           (click)="generateOTP()"
+          [disabled]="isOTPSent"
         >
           <b>{{ isOTPSent ? "Regenerate" : "Generate" }} OTP</b>
         </button>
@@ -129,7 +134,7 @@
         class="close pull-right"
         style="color: white"
         aria-label="Close"
-        (click)="modalRef.hide()"
+        (click)="closeModal()"
       >
         <span aria-hidden="true">&times;</span>
       </button>

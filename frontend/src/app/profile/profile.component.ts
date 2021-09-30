@@ -102,38 +102,40 @@ export class ProfileComponent implements OnInit {
   generateOTP() {
     clearTimeout();
 
-    this.userService.updateLoading('true');
+    if (this.validateFields()) {
+      this.userService.updateLoading('true');
 
-    this.userService.generateOTP(this.newProfileSettings.email).subscribe(
-      (result) => {
-        setTimeout(() => {
-          this.closeModal();
-        }, 3000);
+      this.userService.generateOTP(this.newProfileSettings.email).subscribe(
+        (result) => {
+          setTimeout(() => {
+            this.closeModal();
+          }, 3000);
 
-        setTimeout(() => {
-          this.isOTPSent = false;
-        }, 180000);
+          setTimeout(() => {
+            this.isOTPSent = false;
+          }, 180000);
 
-        this.isOTPSent = true;
-        this.isOTPVerified = undefined;
+          this.isOTPSent = true;
+          this.isOTPVerified = undefined;
 
-        this.modalbody = 'OTP has been generated and is valid for 3 minutes.';
-        this.openModal();
-      },
-      (err) => {
-        setTimeout(() => {
-          this.closeModal();
-        }, 3000);
+          this.modalbody = 'OTP has been generated and is valid for 3 minutes.';
+          this.openModal();
+        },
+        (err) => {
+          setTimeout(() => {
+            this.closeModal();
+          }, 3000);
 
-        this.isOTPSent = undefined;
-        this.isOTPVerified = undefined;
-        this.modalbody = 'Generating OTP failed. Try again later.';
-        this.openModal();
-      },
-      () => {
-        this.userService.updateLoading('false');
-      }
-    );
+          this.isOTPSent = undefined;
+          this.isOTPVerified = undefined;
+          this.modalbody = 'Generating OTP failed. Try again later.';
+          this.openModal();
+        },
+        () => {
+          this.userService.updateLoading('false');
+        }
+      );
+    }
   }
 
   validateEmailAndGenerateOTP() {
@@ -171,31 +173,31 @@ export class ProfileComponent implements OnInit {
   }
 
   verifyOTP(otp: string) {
-    this.isLoading$ = true;
+    clearTimeout();
+    this.userService.updateLoading('true');
     this.userService.verifyOTP(this.newProfileSettings.email, otp).subscribe(
       (result) => {
-        this.isLoading$ = false;
+        this.userService.updateLoading('false');
         this.isOTPVerified = true;
       },
       (err) => {
-        this.isLoading$ = false;
+        this.userService.updateLoading('false');
         setTimeout(() => {
           this.closeModal();
         }, 3000);
 
+        if (err.error.code == 500) {
+          this.isOTPSent = undefined;
+        }
+
         this.isOTPVerified = false;
         this.modalbody = err.error.error;
         this.openModal();
-      },
-      () => {
-        this.userService.updateLoading('false');
       }
     );
   }
 
-  onProfileEdit() {
-    clearTimeout();
-
+  validateFields() {
     this.newProfileSettings.firstName =
       this.newProfileSettings.firstName === undefined
         ? ''
@@ -228,33 +230,34 @@ export class ProfileComponent implements OnInit {
       ? this.newProfileSettings.password === this.confpass
       : false;
 
-    if (
-      this.isFNValid &&
-      this.isLNValid &&
-      this.isEmailValid &&
-      this.isPassValid
-    ) {
-      this.isLoading$ = true;
-      this.userService.updateUserDetails(this.newProfileSettings).subscribe(
-        (result) => {
-          this.isLoading$ = false;
-          setTimeout(() => {
-            this.modalRef.hide();
-            this.authService.logout();
-          }, 3000);
-          this.modalbody = result.data;
-          this.openModal();
-        },
-        (err) => {
-          this.isLoading$ = false;
-          setTimeout(() => {
-            this.modalRef.hide();
-          }, 3000);
-          this.modalbody = err.error.error;
-          this.openModal();
-        }
-      );
-    }
+    return (
+      this.isFNValid && this.isLNValid && this.isEmailValid && this.isPassValid
+    );
+  }
+
+  onProfileEdit() {
+    clearTimeout();
+
+    this.isLoading$ = true;
+    this.userService.updateUserDetails(this.newProfileSettings).subscribe(
+      (result) => {
+        this.isLoading$ = false;
+        setTimeout(() => {
+          this.modalRef.hide();
+          this.authService.logout();
+        }, 3000);
+        this.modalbody = result.data;
+        this.openModal();
+      },
+      (err) => {
+        this.isLoading$ = false;
+        setTimeout(() => {
+          this.modalRef.hide();
+        }, 3000);
+        this.modalbody = err.error.error;
+        this.openModal();
+      }
+    );
   }
 
   goDelete() {

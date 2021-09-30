@@ -19,7 +19,7 @@
           type="text"
           class="form-control"
           [ngClass]="isFNValid === false ? 'invalid-form-control' : null"
-          [disabled]="!isEditClicked"
+          [disabled]="!isEditClicked || isOTPSent"
           placeholder="Enter First Name"
           [(ngModel)]="newProfileSettings.firstName"
         />
@@ -34,7 +34,7 @@
           type="text"
           class="form-control"
           [ngClass]="isLNValid === false ? 'invalid-form-control' : null"
-          [disabled]="!isEditClicked"
+          [disabled]="!isEditClicked || isOTPSent"
           placeholder="Enter Last Name"
           [(ngModel)]="newProfileSettings.lastName"
         />
@@ -47,7 +47,7 @@
           name="profie_email"
           type="email"
           [ngClass]="isEmailValid === false ? 'invalid-form-control' : null"
-          [disabled]="!isEditClicked || (isOTPSent && isOTPVerified)"
+          [disabled]="!isEditClicked || isOTPSent"
           class="form-control"
           placeholder="Enter Email"
           [(ngModel)]="newProfileSettings.email"
@@ -62,7 +62,7 @@
           type="password"
           [ngClass]="isPassValid === false ? 'invalid-form-control' : null"
           class="form-control"
-          [disabled]="!isEditClicked"
+          [disabled]="!isEditClicked || isOTPSent"
           placeholder="Enter Password"
           (click)="explainPassword(passRef)"
           [(ngModel)]="newProfileSettings.password"
@@ -78,7 +78,7 @@
           [ngClass]="isPassValid === false ? 'invalid-form-control' : null"
           type="password"
           class="form-control"
-          [disabled]="!isEditClicked"
+          [disabled]="!isEditClicked || isOTPSent"
           (focus)="confpassRef.setSelectionRange(0, confpassRef.value.length)"
           placeholder="Enter Password Again"
           [(ngModel)]="confpass"
@@ -109,9 +109,7 @@
             name="profie_sendotp"
             class="btn btn-lg btn-block bluebutton"
             (click)="validateEmailAndGenerateOTP()"
-            [disabled]="
-              !isEditClicked || equalObjects() || (isOTPSent && isOTPVerified)
-            "
+            [disabled]="!isEditClicked || equalObjects() || isOTPSent"
           >
             <b>{{ isOTPSent ? "Regenerate" : "Generate" }} OTP</b>
           </button>
@@ -146,7 +144,7 @@
             (click)="onProfileEdit()"
             name="profie_save"
             class="btn btn-lg btn-block bluebutton"
-            [disabled]="!(isOTPSent && isOTPVerified)"
+            [disabled]="!isOTPVerified"
           >
             <b>Save</b>
           </button>
