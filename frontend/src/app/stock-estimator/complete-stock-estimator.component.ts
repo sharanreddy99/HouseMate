@@ -16,11 +16,19 @@ export class CompleteStockEstimatorComponent implements OnInit {
   totalprice: number = 0;
   completeresult = [];
   dtoptions = {
+    info: true,
+    autoWidth: false,
+    lengthMenu: [
+      [10, 25, 50, 100, -1],
+      [10, 25, 50, 100, 'All'],
+    ],
     language: {
-      search: '<b>Search</b>',
-      info: '<b>Showing _START_ to _END_ of _TOTAL_ ITEMS</b>',
-      lengthMenu: '<b>Show</b> _MENU_ <b>Items</b>',
-      emptyTable: 'No Items Found',
+      emptyTable: 'No items found',
+      info: 'Showing _START_ to _END_ of _TOTAL_ Items',
+      infoEmpty: 'Showing 0 to 0 of 0 items',
+      infoFiltered: '(filtered from _MAX_ items)',
+      lengthMenu: 'Show _MENU_ Items',
+      zeroRecords: 'No matching items found',
     },
   };
 
