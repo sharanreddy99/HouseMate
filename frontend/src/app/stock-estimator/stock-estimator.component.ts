@@ -38,46 +38,39 @@ export class StockEstimatorComponent implements OnInit {
 
   fetchStockItems(duration: number, dateduration: string) {
     this.subloadingService.updateLoadingStockEstimator('true');
-    this.itemService
-      .postGetEstimatedItems(
-        duration,
-        dateduration,
-        localStorage.getItem('email'),
-        localStorage.getItem('password')
-      )
-      .subscribe(
-        (result) => {
-          this.subloadingService.updateLoadingStockEstimator('false');
-          let resultdata = undefined;
+    this.itemService.postGetEstimatedItems(duration, dateduration).subscribe(
+      (result) => {
+        this.subloadingService.updateLoadingStockEstimator('false');
+        let resultdata = undefined;
 
-          if (duration) {
-            resultdata = 'You have enough stock for ' + duration + ' days.';
-          } else {
-            resultdata = 'You have enough stock till ' + dateduration + '.';
-          }
-
-          $('.estimatestock-select')
-            .empty()
-            .select2({
-              data: result['estimatedstock'],
-              language: {
-                noResults: function () {
-                  return resultdata;
-                },
-              },
-            });
-
-          let indexarr = [];
-          for (let i = 0; i < result['estimatedstock'].length; i++) {
-            indexarr[i] = result['estimatedstock'][i].id;
-          }
-
-          $('.estimatestock-select').val(indexarr).change();
-        },
-        (error) => {
-          this.subloadingService.updateLoadingStockEstimator('false');
-          window.location.reload();
+        if (duration) {
+          resultdata = 'You have enough stock for ' + duration + ' days.';
+        } else {
+          resultdata = 'You have enough stock till ' + dateduration + '.';
         }
-      );
+
+        $('.estimatestock-select')
+          .empty()
+          .select2({
+            data: result.data['estimatedstock'],
+            language: {
+              noResults: function () {
+                return resultdata;
+              },
+            },
+          });
+
+        let indexarr = [];
+        for (let i = 0; i < result.data['estimatedstock'].length; i++) {
+          indexarr[i] = result.data['estimatedstock'][i].id;
+        }
+
+        $('.estimatestock-select').val(indexarr).change();
+      },
+      (error) => {
+        this.subloadingService.updateLoadingStockEstimator('false');
+        window.location.reload();
+      }
+    );
   }
 }

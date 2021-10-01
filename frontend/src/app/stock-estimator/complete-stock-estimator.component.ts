@@ -110,30 +110,26 @@ export class CompleteStockEstimatorComponent implements OnInit {
   fetchCompleteStockItems(duration: number, dateduration: string) {
     this.isLoading$ = true;
     this.itemService
-      .postGetCompleteEstimatedItems(
-        duration,
-        dateduration,
-        localStorage.getItem('email'),
-        localStorage.getItem('password')
-      )
+      .postGetCompleteEstimatedItems(duration, dateduration)
       .subscribe(
         (result) => {
           this.isLoading$ = false;
           this.completeresult = [];
-          for (let i = 0; i < result['estimatedstock'].length; i++) {
+          for (let i = 0; i < result.data['estimatedstock'].length; i++) {
             this.completeresult[i] = {};
-            this.completeresult[i].id = result['estimatedstock'][i].id;
-            this.completeresult[i].text = result['estimatedstock'][i].text;
+            this.completeresult[i].id = result.data['estimatedstock'][i].id;
+            this.completeresult[i].text = result.data['estimatedstock'][i].text;
             this.completeresult[i].category =
-              result['estimatedstock'][i].category;
-            this.completeresult[i].name = result['estimatedstock'][i].name;
+              result.data['estimatedstock'][i].category;
+            this.completeresult[i].name = result.data['estimatedstock'][i].name;
             this.completeresult[i].nextreqdate =
-              result['estimatedstock'][i].nextreqdate;
+              result.data['estimatedstock'][i].nextreqdate;
             this.completeresult[i].currentstockcount =
-              result['estimatedstock'][i].currentstockcount;
+              result.data['estimatedstock'][i].currentstockcount;
             this.completeresult[i].newstockcount =
-              result['estimatedstock'][i].newstockcount;
-            this.completeresult[i].price = result['estimatedstock'][i].price;
+              result.data['estimatedstock'][i].newstockcount;
+            this.completeresult[i].price =
+              result.data['estimatedstock'][i].price;
           }
           let resultdata = undefined;
 
@@ -144,10 +140,10 @@ export class CompleteStockEstimatorComponent implements OnInit {
           }
 
           var selectArr = [];
-          for (var i = 0; i < result['estimatedstock'].length; i++) {
+          for (var i = 0; i < result.data['estimatedstock'].length; i++) {
             selectArr[i] = {};
             selectArr[i].id = i;
-            selectArr[i].text = result['estimatedstock'][i].text;
+            selectArr[i].text = result.data['estimatedstock'][i].text;
           }
 
           $('.estimatestock-select')
@@ -165,9 +161,9 @@ export class CompleteStockEstimatorComponent implements OnInit {
           this.tabledata = [];
           this.totalprice = 0;
 
-          for (let i = 0; i < result['estimatedstock'].length; i++) {
-            indexarr[i] = result['estimatedstock'][i].id;
-            this.tabledata[i] = result['estimatedstock'][i];
+          for (let i = 0; i < result.data['estimatedstock'].length; i++) {
+            indexarr[i] = result.data['estimatedstock'][i].id;
+            this.tabledata[i] = result.data['estimatedstock'][i];
             if (!this.tabledata[i].price) {
               this.tabledata[i].price = '---';
             } else {

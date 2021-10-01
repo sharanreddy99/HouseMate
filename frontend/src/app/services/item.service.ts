@@ -2,68 +2,134 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ItemSettings } from '../items/itemsettings';
-import { baseUrl } from './baseUrl';
+import { baseUrl, BASE_ITEM_PATH } from './baseUrl';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ItemService {
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
-
-  postAddItem(itemSettings: ItemSettings,email: string,password: string, isDisabled: boolean): Observable<any>{
-    return this.http.post(baseUrl+'addItem',{itemSettings,email,password,isDisabled});
+  postAddItem(
+    itemSettings: ItemSettings,
+    isDisabled: boolean
+  ): Observable<any> {
+    return this.http.post(baseUrl + BASE_ITEM_PATH + 'item', {
+      itemSettings,
+      isDisabled,
+    });
   }
 
-  postGetCategory(email: string,password: string): Observable<any> {
-    return this.http.post(baseUrl+'getCategories',{email,password})
+  postGetCategory(): Observable<any> {
+    return this.http.get(baseUrl + BASE_ITEM_PATH + 'categories');
   }
 
-  postGetItem(category: string,email: string,password: string): Observable<any> {
-    return this.http.post(baseUrl+'getItems',{category,email,password})
+  postGetItems(category: string): Observable<any> {
+    return this.http.get(
+      baseUrl + BASE_ITEM_PATH + 'item?category=' + category
+    );
   }
 
-  getCurrentItemDetails(category: string,name: string, email: string,password: string): Observable<any> {
-    return this.http.post(baseUrl+'getCurrentItem',{category,name,email,password})
-  }
-  
-  postUpdateItem(oldItemSettings:ItemSettings,itemSettings: ItemSettings,email: string,password: string): Observable<any>{
-    return this.http.patch(baseUrl+'updateItem',{oldItemSettings,itemSettings,email,password});
-  }
-
-  postDeleteItem(itemSettings: ItemSettings,email: string,password: string): Observable<any>{
-    return this.http.post(baseUrl+'deleteItem',{itemSettings,email,password});
-  }
-
-  postRefillItem(itemSettings: ItemSettings, newstockcount: number, newquantity: number, newunits: string, email: string, password: string): Observable<any>{
-    return this.http.post(baseUrl+'refillItem',{itemSettings,newstockcount,newquantity,newunits,email,password});
+  getCurrentItemDetails(category: string, name: string): Observable<any> {
+    return this.http.get(
+      baseUrl +
+        BASE_ITEM_PATH +
+        'details?category=' +
+        category +
+        '&name=' +
+        name
+    );
   }
 
-  postRemoveItem(itemSettings: ItemSettings, newstockcount: number, newquantity: number, newunits: string, email: string, password: string): Observable<any>{
-    return this.http.post(baseUrl+'removeItem',{itemSettings,newstockcount,newquantity,newunits,email,password});
+  postUpdateItem(
+    oldItemSettings: ItemSettings,
+    itemSettings: ItemSettings
+  ): Observable<any> {
+    return this.http.patch(baseUrl + BASE_ITEM_PATH + 'item', {
+      oldItemSettings,
+      itemSettings,
+    });
   }
 
-  postGetDisabledState(email: string, password: string): Observable<any>{
-    return this.http.post(baseUrl+'getDisabled',{email,password});
+  postDeleteItem(itemSettings: ItemSettings): Observable<any> {
+    return this.http.post(baseUrl + BASE_ITEM_PATH + 'delete', {
+      itemSettings,
+    });
   }
 
-  postSetDisabledState(isDisabled: boolean, email: string, password: string): Observable<any>{
-    return this.http.post(baseUrl+'setDisabled',{isDisabled,email,password});
+  postRefillItem(
+    itemSettings: ItemSettings,
+    newstockcount: number,
+    newquantity: number,
+    newunits: string
+  ): Observable<any> {
+    return this.http.post(baseUrl + BASE_ITEM_PATH + 'refill/item', {
+      itemSettings,
+      newstockcount,
+      newquantity,
+      newunits,
+    });
   }
 
-  postGetEstimatedItems(duration: number, dateduration: string, email: string, password: string): Observable<any>{
-    return this.http.post(baseUrl+'getestimatedstock',{duration,dateduration,email,password});
+  postRemoveItem(
+    itemSettings: ItemSettings,
+    newstockcount: number,
+    newquantity: number,
+    newunits: string
+  ): Observable<any> {
+    return this.http.post(baseUrl + BASE_ITEM_PATH + 'remove/item', {
+      itemSettings,
+      newstockcount,
+      newquantity,
+      newunits,
+    });
   }
 
-  postGetCompleteEstimatedItems(duration: number, dateduration: string, email: string, password: string): Observable<any>{
-    return this.http.post(baseUrl+'getcompleteestimatedstock',{duration,dateduration,email,password});
+  postGetDisabledState(): Observable<any> {
+    return this.http.get(baseUrl + BASE_ITEM_PATH + 'disabled');
   }
 
-  postGetAllItems(email: string, password: string): Observable<any>{
-    return this.http.post(baseUrl+'getallitems',{email,password});
+  postSetDisabledState(isDisabled: boolean): Observable<any> {
+    return this.http.post(baseUrl + BASE_ITEM_PATH + 'disabled', {
+      isDisabled,
+    });
   }
 
-  postGetItemsForSummary(category: string, email: string, password: string): Observable<any>{
-    return this.http.post(baseUrl+'getitemsforsummary',{category,email,password})
+  postGetEstimatedItems(
+    duration: number,
+    dateduration: string
+  ): Observable<any> {
+    return this.http.get(
+      baseUrl +
+        BASE_ITEM_PATH +
+        'estimatedstock?duration=' +
+        duration +
+        '&dateduration=' +
+        dateduration
+    );
+  }
+
+  postGetCompleteEstimatedItems(
+    duration: number,
+    dateduration: string
+  ): Observable<any> {
+    return this.http.get(
+      baseUrl +
+        BASE_ITEM_PATH +
+        'estimatedstock/complete?duration=' +
+        duration +
+        '&dateduration=' +
+        dateduration
+    );
+  }
+
+  postGetAllItems(): Observable<any> {
+    return this.http.get(baseUrl + BASE_ITEM_PATH + 'all');
+  }
+
+  postGetItemsForSummary(category: string): Observable<any> {
+    return this.http.get(
+      baseUrl + BASE_ITEM_PATH + 'summary/all?category=' + category
+    );
   }
 }

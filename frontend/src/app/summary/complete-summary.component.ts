@@ -8,16 +8,12 @@ declare var $: any;
 @Component({
   selector: 'app-complete-summary',
   templateUrl: './complete-summary.component.html',
-  styleUrls: ['./summary.component.css']
+  styleUrls: ['./summary.component.css'],
 })
 export class CompleteSummaryComponent implements OnInit {
-
-
   colors = undefined;
 
-  categoryOptions = [
-    {id: 0, text: 'All Items'}
-  ];
+  categoryOptions = [{ id: 0, text: 'All Items' }];
 
   view: any[] = [];
   isLoading$: boolean = false;
@@ -38,121 +34,144 @@ export class CompleteSummaryComponent implements OnInit {
   yAxisLabel = 'Stock Count';
   timeline = false;
 
-  colorScheme = {domain: []};
+  colorScheme = { domain: [] };
 
   multi: any = [];
-  
-  constructor(private itemService: ItemService, private router: Router,private userService: UserService){}
+
+  constructor(
+    private itemService: ItemService,
+    private router: Router,
+    private userService: UserService
+  ) {}
 
   ngOnInit() {
-    
-    $(document).ready(()=>{
-      $('.helloworld').scroll(()=>{
+    $(document).ready(() => {
+      $('.helloworld').scroll(() => {
         $('.hiddenbutton').click();
-      })
+      });
     });
 
     $('.category-select').select2({
-      data: this.categoryOptions
+      data: this.categoryOptions,
     });
 
     this.isLoading$ = true;
-    this.itemService.postGetAllItems(localStorage.getItem('email'),localStorage.getItem('password')).subscribe(
-      result => {
-        this.isLoading$ = false;
-        this.categoryOptions = [{id: 0, text: 'ALl Items'}];
-        this.categoryOptions = this.categoryOptions.concat(result['selectdata']);  
-        $('.category-select').select2({
-          data: this.categoryOptions
-        });
-        this.getAllItems();
-      }
-    );
+    this.itemService.postGetAllItems().subscribe((result) => {
+      this.isLoading$ = false;
+      this.categoryOptions = [{ id: 0, text: 'All Items' }];
+      this.categoryOptions = this.categoryOptions.concat(
+        result.data['selectdata']
+      );
+      $('.category-select').select2({
+        data: this.categoryOptions,
+      });
+      this.getAllItems();
+    });
 
-    
-    $('.category-select').on('select2:selecting',(e)=>{
+    $('.category-select').on('select2:selecting', (e) => {
       let index = e.params.args.data.id;
-      if(index==0){
+      if (index == 0) {
         this.getAllItems();
-      }
-      else{
+      } else {
         this.isLoading$ = true;
-        this.itemService.postGetItemsForSummary(this.categoryOptions[index].text,localStorage.getItem('email'),localStorage.getItem('password')).subscribe(
-        result => {
-          this.isLoading$ = false;
-          this.multi = [];
-          this.colorScheme = {domain: []};
+        this.itemService
+          .postGetItemsForSummary(this.categoryOptions[index].text)
+          .subscribe(
+            (result) => {
+              this.isLoading$ = false;
+              this.multi = [];
+              this.colorScheme = { domain: [] };
 
-          result['estimatedstock'].sort((a,b)=> a.category.localeCompare(b.category));
+              result.data['estimatedstock'].sort((a, b) =>
+                a.category.localeCompare(b.category)
+              );
 
-          for(let i=0;i<result['estimatedstock'].length;i++){
-            this.multi[i] = {}
-            this.multi[i]["name"] = result['estimatedstock'][i].name;
-            this.multi[i]["value"] = parseInt(''+result['estimatedstock'][i].stockcount);
-            this.multi[i]['extra'] = {};
-            this.multi[i]['extra']['category'] = result['estimatedstock'][i].category;
-            this.multi[i]['extra']['nextreqdate'] = result['estimatedstock'][i].nextreqdate;
-            this.colorScheme.domain.push(this.colors[result['estimatedstock'][i].category])
-          }
+              for (let i = 0; i < result.data['estimatedstock'].length; i++) {
+                this.multi[i] = {};
+                this.multi[i]['name'] = result.data['estimatedstock'][i].name;
+                this.multi[i]['value'] = parseInt(
+                  '' + result.data['estimatedstock'][i].stockcount
+                );
+                this.multi[i]['extra'] = {};
+                this.multi[i]['extra']['category'] =
+                  result.data['estimatedstock'][i].category;
+                this.multi[i]['extra']['nextreqdate'] =
+                  result.data['estimatedstock'][i].nextreqdate;
+                this.colorScheme.domain.push(
+                  this.colors[result.data['estimatedstock'][i].category]
+                );
+              }
 
-          this.view = [60*result['estimatedstock'].length,500];
-          if(this.view[0]<200){
-            this.view[0]=200;
-          }
-          this.yAxisLabel = "Stock Count for "+result['estimatedstock'][0].category;
-        },
-        error => {
-          this.isLoading$ = false;
-          this.router.navigate(['dashboard']);
-        })
+              this.view = [60 * result.data['estimatedstock'].length, 500];
+              if (this.view[0] < 200) {
+                this.view[0] = 200;
+              }
+              this.yAxisLabel =
+                'Stock Count for ' + result.data['estimatedstock'][0].category;
+            },
+            (error) => {
+              this.isLoading$ = false;
+              this.router.navigate(['dashboard']);
+            }
+          );
       }
     });
   }
 
   random_rgba() {
-    return 'hsla(' + (Math.random() * 360) + ', 100%, 50%, 1)';
+    return 'hsla(' + Math.random() * 360 + ', 100%, 50%, 1)';
   }
-  
-  getAllItems(){  
+
+  getAllItems() {
     this.isLoading$ = true;
-    this.itemService.postGetAllItems(localStorage.getItem('email'),localStorage.getItem('password')).subscribe(
-      result => {
+    this.itemService.postGetAllItems().subscribe(
+      (result) => {
         this.isLoading$ = false;
-        this.categoryOptions = [{id: 0, text: 'All Items'}];
-        this.categoryOptions = this.categoryOptions.concat(result['selectdata']);  
+        this.categoryOptions = [{ id: 0, text: 'All Items' }];
+        this.categoryOptions = this.categoryOptions.concat(
+          result.data['selectdata']
+        );
         $('.category-select').select2({
-          data: this.categoryOptions
+          data: this.categoryOptions,
         });
-    
-        if(!this.colors){
+
+        if (!this.colors) {
           this.colors = {};
-          for(var i=1;i<this.categoryOptions.length;i++){
+          for (var i = 1; i < this.categoryOptions.length; i++) {
             this.colors[this.categoryOptions[i].text] = this.random_rgba();
-          }  
+          }
         }
-        
-        result['estimatedstock'].sort((a,b)=> a.category.localeCompare(b.category));
+
+        result.data['estimatedstock'].sort((a, b) =>
+          a.category.localeCompare(b.category)
+        );
 
         this.multi = [];
-        this.colorScheme = {domain: []};
-        
-        for(let i=0;i<result['estimatedstock'].length;i++){
-          this.multi[i] = {}
-          this.multi[i]["name"] = result['estimatedstock'][i].name;
-          this.multi[i]["value"] = parseInt(''+result['estimatedstock'][i].stockcount);
+        this.colorScheme = { domain: [] };
+
+        for (let i = 0; i < result.data['estimatedstock'].length; i++) {
+          this.multi[i] = {};
+          this.multi[i]['name'] = result.data['estimatedstock'][i].name;
+          this.multi[i]['value'] = parseInt(
+            '' + result.data['estimatedstock'][i].stockcount
+          );
           this.multi[i]['extra'] = {};
-          this.multi[i]['extra']['category'] = result['estimatedstock'][i].category;
-          this.multi[i]['extra']['nextreqdate'] = result['estimatedstock'][i].nextreqdate;
-          this.colorScheme.domain.push(this.colors[result['estimatedstock'][i].category]);
+          this.multi[i]['extra']['category'] =
+            result.data['estimatedstock'][i].category;
+          this.multi[i]['extra']['nextreqdate'] =
+            result.data['estimatedstock'][i].nextreqdate;
+          this.colorScheme.domain.push(
+            this.colors[result.data['estimatedstock'][i].category]
+          );
         }
 
-        this.view = [60*result['estimatedstock'].length,500];
-        if(this.view[0]<200){
-          this.view[0]=200;
+        this.view = [60 * result.data['estimatedstock'].length, 500];
+        if (this.view[0] < 200) {
+          this.view[0] = 200;
         }
-        this.yAxisLabel = "Stock Count for All Items"; 
+        this.yAxisLabel = 'Stock Count for All Items';
       },
-      error => {
+      (error) => {
         this.isLoading$ = false;
         this.router.navigate(['dashboard']);
       }

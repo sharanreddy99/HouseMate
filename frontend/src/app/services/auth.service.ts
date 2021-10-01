@@ -49,11 +49,27 @@ export class AuthService {
   logout() {
     this.http.get(baseUrl + BASE_AUTH_PATH + 'logout').subscribe(
       (res) => {
-        localStorage.removeItem('access_token');
+        let currentUser = localStorage.getItem('currentUser');
+        let rememberme = localStorage.getItem('rememberme');
+        localStorage.clear();
+        if (currentUser) {
+          localStorage.setItem('currentUser', currentUser);
+        }
+        if (rememberme) {
+          localStorage.setItem('rememberme', rememberme);
+        }
         this.router.navigate(['']);
       },
       (err) => {
-        localStorage.removeItem('access_token');
+        let currentUser = localStorage.getItem('currentUser');
+        let rememberme = localStorage.getItem('rememberme');
+        localStorage.clear();
+        if (currentUser) {
+          localStorage.setItem('currentUser', currentUser);
+        }
+        if (rememberme) {
+          localStorage.setItem('rememberme', rememberme);
+        }
         this.router.navigate(['']);
       }
     );

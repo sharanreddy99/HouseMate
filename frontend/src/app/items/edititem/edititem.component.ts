@@ -5,15 +5,14 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { BsModalService, BsModalRef } from 'ngx-bootstrap/modal';
 import { UserService } from 'src/app/services/user.service';
 
-declare var $:any;
+declare var $: any;
 
 @Component({
   selector: 'app-edititem',
   templateUrl: './edititem.component.html',
-  styleUrls: ['./edititem.component.css']
+  styleUrls: ['./edititem.component.css'],
 })
 export class EdititemComponent implements OnInit {
-  
   @ViewChild('template2') template: TemplateRef<any>;
   modalRef2: BsModalRef;
   secondmodalbody: string;
@@ -28,7 +27,7 @@ export class EdititemComponent implements OnInit {
     stockcount: undefined,
     price: undefined,
     notify: 'choose',
-    utilizationTime:undefined,
+    utilizationTime: undefined,
     utilizationQuantity: undefined,
     utilizationUnits: 'choose',
     description: undefined,
@@ -36,8 +35,8 @@ export class EdititemComponent implements OnInit {
     totalstock: {
       amount: undefined,
       units: undefined,
-      daysleft: undefined
-    }
+      daysleft: undefined,
+    },
   };
 
   itemSettings: ItemSettings = {
@@ -48,7 +47,7 @@ export class EdititemComponent implements OnInit {
     stockcount: undefined,
     price: undefined,
     notify: 'choose',
-    utilizationTime:undefined,
+    utilizationTime: undefined,
     utilizationQuantity: undefined,
     utilizationUnits: 'choose',
     description: undefined,
@@ -56,8 +55,8 @@ export class EdititemComponent implements OnInit {
     totalstock: {
       amount: undefined,
       units: undefined,
-      daysleft: undefined
-    }
+      daysleft: undefined,
+    },
   };
 
   isUnitsValid: boolean;
@@ -65,194 +64,210 @@ export class EdititemComponent implements OnInit {
   isUtilTimeValid: boolean;
   isUtilUnitsValid: boolean;
   isDateValid: boolean;
-  
+
   config = {
     keyboard: false,
-    ignoreBackdropClick: true
-  }
- 
-  ngOnInit(){
+    ignoreBackdropClick: true,
+  };
+
+  ngOnInit() {
     this.todaydate = new Date();
     var dd: any = this.todaydate.getDate();
 
-    var mm: any = this.todaydate.getMonth()+1; 
+    var mm: any = this.todaydate.getMonth() + 1;
     var yyyy = this.todaydate.getFullYear();
-    if(dd<10) 
-    {
-      dd = '0'+dd;
-    } 
+    if (dd < 10) {
+      dd = '0' + dd;
+    }
 
-    if(mm<10) 
-    {
-        mm='0'+mm;
-    } 
-    this.todaydate = yyyy+'-'+mm+'-'+dd;
-    
+    if (mm < 10) {
+      mm = '0' + mm;
+    }
+    this.todaydate = yyyy + '-' + mm + '-' + dd;
+
     let category = localStorage.getItem('category');
-    let name = localStorage.getItem('name')
-    
+    let name = localStorage.getItem('name');
+
     this.isLoading$ = true;
-    this.itemService.getCurrentItemDetails(category,name,localStorage.getItem('email'),localStorage.getItem('password')).subscribe(
-      result => {
+    this.itemService.getCurrentItemDetails(category, name).subscribe(
+      (result) => {
         this.isLoading$ = false;
-        this.itemSettings = result;
-        this.oldItemSettings = {...result};
-      },error => {
+        this.itemSettings = result.data;
+        this.oldItemSettings = { ...result.data };
+      },
+      (error) => {
         this.isLoading$ = false;
-        this.router.navigate(['items'])
+        this.router.navigate(['items']);
       }
-    )
+    );
   }
 
-
-  constructor(private itemService: ItemService,
+  constructor(
+    private itemService: ItemService,
     private router: Router,
-    private route:  ActivatedRoute,
+    private route: ActivatedRoute,
     private modalService: BsModalService,
-    private userService: UserService) {
-    }
-  
-  updateItem(){
-    
+    private userService: UserService
+  ) {}
+
+  updateItem() {
     this.itemSettings.category = this.itemSettings.category.trim();
     this.itemSettings.name = this.itemSettings.name.trim();
-    
-    if(this.itemSettings.units === 'choose'){
+
+    if (this.itemSettings.units === 'choose') {
       this.isUnitsValid = false;
-    }
-    
-    else{
+    } else {
       this.isUnitsValid = true;
     }
 
-    
-    if(!(parseFloat(''+this.itemSettings.quantity) && parseFloat(''+this.itemSettings.quantity)>0)){
-      setTimeout(()=>{
+    if (
+      !(
+        parseFloat('' + this.itemSettings.quantity) &&
+        parseFloat('' + this.itemSettings.quantity) > 0
+      )
+    ) {
+      setTimeout(() => {
         this.closeSecondModal();
-      },2500);
-      this.itemSettings.quantity = undefined;  
-      this.secondmodalbody = "Provide a valid stock quantity.";
+      }, 2500);
+      this.itemSettings.quantity = undefined;
+      this.secondmodalbody = 'Provide a valid stock quantity.';
       this.openSecondModal();
       return;
     }
-    
-    if(this.itemSettings.notify === 'choose'){
-      this.isNotifyValid= false;
-      this.isUtilTimeValid= false;
-      this.isUtilUnitsValid= false;
-      this.isDateValid= false;
-    }
-    
-    else if(this.itemSettings.notify === 'request'){
+
+    if (this.itemSettings.notify === 'choose') {
+      this.isNotifyValid = false;
+      this.isUtilTimeValid = false;
+      this.isUtilUnitsValid = false;
+      this.isDateValid = false;
+    } else if (this.itemSettings.notify === 'request') {
       this.isNotifyValid = true;
-      this.isUtilTimeValid= true;
-      this.isUtilUnitsValid= true;
-      
-      if(this.itemSettings.nextreqdate){
+      this.isUtilTimeValid = true;
+      this.isUtilUnitsValid = true;
+
+      if (this.itemSettings.nextreqdate) {
         this.isDateValid = true;
-      }
-      else{
+      } else {
         this.isDateValid = false;
       }
-    }
-    else{
-
+    } else {
       this.isNotifyValid = true;
       this.isDateValid = true;
 
-      if(this.itemSettings.utilizationTime >=0){
+      if (this.itemSettings.utilizationTime >= 0) {
         this.isUtilTimeValid = true;
-      }else{
+      } else {
         this.isUtilTimeValid = false;
       }
-      
-      if(!(parseFloat(''+this.itemSettings.utilizationQuantity) && parseFloat(''+this.itemSettings.utilizationQuantity)>0)){
-        setTimeout(()=>{
+
+      if (
+        !(
+          parseFloat('' + this.itemSettings.utilizationQuantity) &&
+          parseFloat('' + this.itemSettings.utilizationQuantity) > 0
+        )
+      ) {
+        setTimeout(() => {
           this.closeSecondModal();
-        },2500);
-        this.itemSettings.utilizationQuantity = undefined;  
-        this.secondmodalbody = "Provide a valid Utilization quantity.";
+        }, 2500);
+        this.itemSettings.utilizationQuantity = undefined;
+        this.secondmodalbody = 'Provide a valid Utilization quantity.';
         this.openSecondModal();
         return;
       }
 
-      if(this.itemSettings.utilizationUnits === 'choose'){
+      if (this.itemSettings.utilizationUnits === 'choose') {
         this.isUtilUnitsValid = false;
-      }else{
+      } else {
         this.isUtilUnitsValid = true;
       }
 
-      if((this.itemSettings.units == 'kg' || this.itemSettings.units == 'gms') && (this.itemSettings.utilizationUnits == 'kg' || this.itemSettings.utilizationUnits == 'gms')){
+      if (
+        (this.itemSettings.units == 'kg' || this.itemSettings.units == 'gms') &&
+        (this.itemSettings.utilizationUnits == 'kg' ||
+          this.itemSettings.utilizationUnits == 'gms')
+      ) {
         this.isUnitsValid = true;
         this.isUtilUnitsValid = true;
-      }
-
-      else if((this.itemSettings.units == 'lit' || this.itemSettings.units == 'ml') && (this.itemSettings.utilizationUnits == 'lit' || this.itemSettings.utilizationUnits == 'ml')){
+      } else if (
+        (this.itemSettings.units == 'lit' || this.itemSettings.units == 'ml') &&
+        (this.itemSettings.utilizationUnits == 'lit' ||
+          this.itemSettings.utilizationUnits == 'ml')
+      ) {
         this.isUnitsValid = true;
         this.isUtilUnitsValid = true;
-      }
-
-      else if(this.itemSettings.units == 'dozen' && this.itemSettings.utilizationUnits == 'dozen'){
+      } else if (
+        this.itemSettings.units == 'dozen' &&
+        this.itemSettings.utilizationUnits == 'dozen'
+      ) {
         this.isUnitsValid = true;
         this.isUtilUnitsValid = true;
-      }
-
-      else if(this.itemSettings.units == 'units' && this.itemSettings.utilizationUnits == 'units'){
+      } else if (
+        this.itemSettings.units == 'units' &&
+        this.itemSettings.utilizationUnits == 'units'
+      ) {
         this.isUnitsValid = true;
         this.isUtilUnitsValid = true;
-      }
-      else{
+      } else {
         this.isUnitsValid = false;
         this.isUtilUnitsValid = false;
       }
     }
 
-    if(this.isUnitsValid && this.isNotifyValid && this.isUtilTimeValid && this.isUtilUnitsValid && this.isDateValid ){
-      
+    if (
+      this.isUnitsValid &&
+      this.isNotifyValid &&
+      this.isUtilTimeValid &&
+      this.isUtilUnitsValid &&
+      this.isDateValid
+    ) {
       this.itemSettings.category = this.itemSettings.category.toUpperCase();
       this.itemSettings.name = this.itemSettings.name.toUpperCase();
 
       this.isLoading$ = true;
-      this.itemService.postUpdateItem(this.oldItemSettings,this.itemSettings,localStorage.getItem('email'),localStorage.getItem('password')).subscribe(
-        result => {
-          this.isLoading$ = false;
-          setTimeout(()=>{
-            this.closeSecondModal();
-            window.location.reload();
-          },2000);
-          
-          localStorage.setItem('category',result.category);
-          localStorage.setItem('name',result.name);
-          this.secondmodalbody = "Updated Item Successfully.";
-          this.openSecondModal();
-        },
-        error => {
-          this.isLoading$ = false;
-          setTimeout(()=>{
-            this.closeSecondModal();
-          },2000);
-          
-          this.secondmodalbody = "Updating Item Failed. Check whether the updated item already exists.";
-          this.openSecondModal();
-        }
-      );
+      this.itemService
+        .postUpdateItem(this.oldItemSettings, this.itemSettings)
+        .subscribe(
+          (result) => {
+            this.isLoading$ = false;
+            setTimeout(() => {
+              this.closeSecondModal();
+              window.location.reload();
+            }, 2000);
+
+            localStorage.setItem('category', result.data.category);
+            localStorage.setItem('name', result.data.name);
+            this.secondmodalbody = 'Updated Item Successfully.';
+            this.openSecondModal();
+          },
+          (err) => {
+            this.isLoading$ = false;
+            setTimeout(() => {
+              this.closeSecondModal();
+              this.router.navigate(['items']);
+            }, 2000);
+
+            this.secondmodalbody = err.error.error;
+            this.openSecondModal();
+          }
+        );
     }
   }
 
-  onCancel(){
+  onCancel() {
     this.router.navigate(['items']);
   }
 
-  openSecondModal(){
+  openSecondModal() {
     this.modalRef2 = this.modalService.show(this.template);
   }
 
-  closeSecondModal(){
+  closeSecondModal() {
     this.modalRef2.hide();
   }
 
-  compareBothSettings(){
-    return JSON.stringify(this.itemSettings)==JSON.stringify(this.oldItemSettings);
+  compareBothSettings() {
+    return (
+      JSON.stringify(this.itemSettings) == JSON.stringify(this.oldItemSettings)
+    );
   }
-
 }

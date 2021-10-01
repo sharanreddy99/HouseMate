@@ -10,16 +10,15 @@ declare var $: any;
 @Component({
   selector: 'app-deleteitem',
   templateUrl: './deleteitem.component.html',
-  styleUrls: ['./deleteitem.component.css']
+  styleUrls: ['./deleteitem.component.css'],
 })
 export class DeleteitemComponent {
-  
   @ViewChild('template2') template: TemplateRef<any>;
   @ViewChild('template3') template3: TemplateRef<any>;
 
   modalRef2: BsModalRef;
   modalRef3: BsModalRef;
-  
+
   secondmodalbody: string;
 
   itemSettings: ItemSettings = {
@@ -30,7 +29,7 @@ export class DeleteitemComponent {
     stockcount: undefined,
     price: undefined,
     notify: 'choose',
-    utilizationTime:undefined,
+    utilizationTime: undefined,
     utilizationQuantity: undefined,
     utilizationUnits: 'choose',
     description: undefined,
@@ -38,100 +37,100 @@ export class DeleteitemComponent {
     totalstock: {
       amount: undefined,
       units: undefined,
-      daysleft: undefined
-    }
+      daysleft: undefined,
+    },
   };
 
   isLoading$: boolean = false;
-  
+
   config = {
     keyboard: false,
-    ignoreBackdropClick: true
-  }
- 
-  ngOnInit(){
+    ignoreBackdropClick: true,
+  };
+
+  ngOnInit() {
     let category = localStorage.getItem('category');
-    let name = localStorage.getItem('name')
-    
+    let name = localStorage.getItem('name');
+
     this.isLoading$ = true;
-    this.itemService.getCurrentItemDetails(category,name,localStorage.getItem('email'),localStorage.getItem('password')).subscribe(
-      result => {
+    this.itemService.getCurrentItemDetails(category, name).subscribe(
+      (result) => {
         this.isLoading$ = false;
-        this.itemSettings = result;
-      },error => {
+        this.itemSettings = result.data;
+      },
+      (error) => {
         this.isLoading$ = false;
-        setTimeout(()=>{
+        setTimeout(() => {
           this.router.navigate(['items']);
-        },2000);
-        
-        this.secondmodalbody = "Unable to fetch details. Please try again.";
+        }, 2000);
+
+        this.secondmodalbody = 'Unable to fetch details. Please try again.';
         this.openSecondModal();
       }
-    )
+    );
   }
 
-
-  constructor(private itemService: ItemService,
+  constructor(
+    private itemService: ItemService,
     private router: Router,
-    private route:  ActivatedRoute,
+    private route: ActivatedRoute,
     private modalService: BsModalService,
-    private userService: UserService) {
-    }
-  
-  deleteItem(){
+    private userService: UserService
+  ) {}
+
+  deleteItem() {
     this.modalRef3.hide();
     this.isLoading$ = true;
-    this.itemService.postDeleteItem(this.itemSettings,localStorage.getItem('email'),localStorage.getItem('password')).subscribe(
-      result => {
+    this.itemService.postDeleteItem(this.itemSettings).subscribe(
+      (result) => {
         this.isLoading$ = false;
-        setTimeout(()=>{
+        setTimeout(() => {
           this.closeSecondModal();
-          this.router.navigate(['items']).then(()=>{
+          this.router.navigate(['items']).then(() => {
             window.location.reload();
           });
-        },2000);
-        
+        }, 2000);
+
         localStorage.removeItem('categoryid');
         localStorage.removeItem('category');
         localStorage.removeItem('nameid');
         localStorage.removeItem('name');
-        this.secondmodalbody = "Deleted Item Successfully.";
+        this.secondmodalbody = 'Deleted Item Successfully.';
         this.openSecondModal();
       },
-      error => {
+      (err) => {
         this.isLoading$ = false;
-        setTimeout(()=>{
+        setTimeout(() => {
           this.closeSecondModal();
           localStorage.removeItem('categoryid');
           localStorage.removeItem('category');
           localStorage.removeItem('nameid');
           localStorage.removeItem('name');
           this.router.navigate(['items']);
-        },2000);
-        this.secondmodalbody = "Deleting Item Failed. Please try again.";
+        }, 2000);
+        this.secondmodalbody = err.error.error;
         this.openSecondModal();
       }
     );
   }
 
-  onCancel(){
+  onCancel() {
     this.router.navigate(['items']);
   }
 
-  
-  openSecondModal(){
+  openSecondModal() {
     this.modalRef2 = this.modalService.show(this.template);
   }
 
-  closeSecondModal(){
+  closeSecondModal() {
     this.modalRef2.hide();
   }
 
-  closeThirdModal(){
+  closeThirdModal() {
     this.modalRef3.hide();
   }
-  
-  openThirdModal(){
+
+  openThirdModal() {
     this.modalRef3 = this.modalService.show(this.template3);
   }
 }
