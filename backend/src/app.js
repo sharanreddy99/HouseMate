@@ -24,10 +24,10 @@ app.use(express.json());
 // app.use(express.static(ProjectURL));
 
 app.use(middleware.InitAPILoggerMiddleware);
-app.use("/api/auth/", defaultAuthRouter);
-app.use("/api/email/", defaultEmailRouter);
-app.use("/api", itemRouter);
-app.use("/api", reminderRouter);
+app.use("/api/auth", defaultAuthRouter);
+app.use("/api/email", defaultEmailRouter);
+app.use("/api/items", itemRouter);
+app.use("/api/reminders", reminderRouter);
 
 // app.get('/',(req,res)=>{
 //     res.status(200).send("Hello Sharan Reddy")
