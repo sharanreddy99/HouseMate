@@ -5,9 +5,11 @@
   "main": "index.js",
   "scripts": {
     "migrate": "cd node_modules/npm-atom/db && npx migrate-mongo up && cd ../../../",
+    "migrate_housemate": "cd src/db && npx migrate-mongo up && cd ../../",
     "rollback": "cd node_modules/npm-atom/db && npx migrate-mongo down && cd ../../../",
-    "start-windows": "(for /F \"tokens=*\" %i in (.env) do set %i) && nodemon src/index.js",
-    "start-linux": "export $(cat .env | xargs) && nodemon src/index.js"
+    "rollback_housemate": "cd src/db && npx migrate-mongo down && cd ../../",
+    "setenv_windows": "(for /F \"tokens=*\" %i in (.env) do set %i)",
+    "setenv_linux": "export $(cat .env | xargs)"
   },
   "author": "",
   "license": "ISC",
@@ -28,6 +30,6 @@
     "multer": "^1.4.2",
     "nodemailer": "^6.4.10",
     "nodemon": "^2.0.7",
-    "npm-atom": "^0.0.11"
+    "npm-atom": "^0.0.15"
   }
 }
