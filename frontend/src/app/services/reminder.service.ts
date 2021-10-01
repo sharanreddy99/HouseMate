@@ -2,28 +2,33 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { ReminderSettings } from '../reminder/remindersettings';
-import { baseUrl } from './baseUrl';
+import { baseUrl, BASE_REMINDER_PATH } from './baseUrl';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class ReminderService {
+  constructor(private http: HttpClient) {}
 
-  constructor(private http: HttpClient) { }
-
-  postAddReminder(reminderSettings: ReminderSettings, email: string, password: string): Observable<any> {
-    return this.http.post(baseUrl+'addreminder',{reminderSettings, email, password});
+  postAddReminder(reminderSettings: ReminderSettings): Observable<any> {
+    return this.http.post(baseUrl + BASE_REMINDER_PATH + 'reminder', {
+      reminderSettings,
+    });
   }
 
-  postGetAllReminders(email: string, password: string): Observable<any> {
-    return this.http.post(baseUrl+'getallreminder',{email, password});
+  postGetAllReminders(): Observable<any> {
+    return this.http.get(baseUrl + BASE_REMINDER_PATH + 'all');
   }
 
-  postDeleteOneReminder(_id: string, email: string, password: string): Observable<any>{
-    return this.http.post(baseUrl+'deleteonereminder',{_id,email,password});
+  postDeleteOneReminder(_id: string): Observable<any> {
+    return this.http.delete(
+      baseUrl + BASE_REMINDER_PATH + 'reminder?id=' + _id
+    );
   }
 
-  postDeleteAllReminders(title: string, email: string, password: string): Observable<any>{
-    return this.http.post(baseUrl+'deleteallreminders',{title,email,password});
+  postDeleteAllReminders(title: string): Observable<any> {
+    return this.http.delete(
+      baseUrl + BASE_REMINDER_PATH + 'all?title=' + title
+    );
   }
 }

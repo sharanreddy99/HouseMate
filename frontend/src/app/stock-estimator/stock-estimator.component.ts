@@ -69,7 +69,6 @@ export class StockEstimatorComponent implements OnInit {
       },
       (error) => {
         this.subloadingService.updateLoadingStockEstimator('false');
-        window.location.reload();
       }
     );
   }

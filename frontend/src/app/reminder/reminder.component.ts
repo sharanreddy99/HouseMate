@@ -18,22 +18,17 @@ export class ReminderComponent implements OnInit {
 
   ngOnInit(): void {
     this.subloadingService.updateLoadingReminder('true');
-    this.reminderService
-      .postGetAllReminders(
-        localStorage.getItem('email'),
-        localStorage.getItem('password')
-      )
-      .subscribe(
-        (result) => {
-          this.subloadingService.updateLoadingReminder('false');
-          this.reminders = result;
-          for (let i = 0; i < this.reminders.length; i++) {
-            this.reminders[i].id = i;
-          }
-        },
-        (err) => {
-          this.subloadingService.updateLoadingReminder('false');
+    this.reminderService.postGetAllReminders().subscribe(
+      (result) => {
+        this.subloadingService.updateLoadingReminder('false');
+        this.reminders = result.data;
+        for (let i = 0; i < this.reminders.length; i++) {
+          this.reminders[i].id = i;
         }
-      );
+      },
+      (err) => {
+        this.subloadingService.updateLoadingReminder('false');
+      }
+    );
   }
 }

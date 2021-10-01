@@ -9,10 +9,9 @@ declare var $: any;
 @Component({
   selector: 'app-complete-reminder',
   templateUrl: './complete-reminder.component.html',
-  styleUrls: ['./reminder.component.css']
+  styleUrls: ['./reminder.component.css'],
 })
 export class CompleteReminderComponent implements OnInit {
-
   modalRef: BsModalRef;
   modalRef2: BsModalRef;
   todaydate: any = undefined;
@@ -38,111 +37,112 @@ export class CompleteReminderComponent implements OnInit {
     timegap: undefined,
     daysselected: [],
     timeselected: [],
-  }
+  };
 
-  isTitleValid: boolean      = undefined;
-  isDaysValid: boolean       = undefined;
+  isTitleValid: boolean = undefined;
+  isDaysValid: boolean = undefined;
   isCustomDaysValid: boolean = undefined;
-  isTimeValid: boolean       = undefined;
+  isTimeValid: boolean = undefined;
   isCustomTimeValid: boolean = undefined;
 
-  constructor(private reminderService: ReminderService,
+  constructor(
+    private reminderService: ReminderService,
     private modalService: BsModalService,
     private router: Router,
-    private userService: UserService) { }
+    private userService: UserService
+  ) {}
 
   openModal() {
     this.modalRef = this.modalService.show(this.template);
   }
-  
+
   ngOnInit(): void {
     this.todaydate = new Date();
     var dd: any = this.todaydate.getDate();
 
-    var mm: any = this.todaydate.getMonth()+1; 
+    var mm: any = this.todaydate.getMonth() + 1;
     var yyyy = this.todaydate.getFullYear();
-    if(dd<10) 
-    {
-      dd = '0'+dd;
-    } 
+    if (dd < 10) {
+      dd = '0' + dd;
+    }
 
-    if(mm<10) 
-    {
-        mm='0'+mm;
-    } 
-    this.todaydate = yyyy+'-'+mm+'-'+dd;
+    if (mm < 10) {
+      mm = '0' + mm;
+    }
+    this.todaydate = yyyy + '-' + mm + '-' + dd;
 
     this.isLoading$ = true;
-    this.reminderService.postGetAllReminders(localStorage.getItem('email'),localStorage.getItem('password')).subscribe(
-      result => {
+    this.reminderService.postGetAllReminders().subscribe(
+      (result) => {
         this.isLoading$ = false;
-        this.reminders = result
-        for(let i=0;i<this.reminders.length;i++){
+        this.reminders = result.data;
+        for (let i = 0; i < this.reminders.length; i++) {
           this.reminders[i].id = i;
         }
       },
-      error => {
+      (err) => {
         this.isLoading$ = false;
-        setTimeout(()=>{
+        setTimeout(() => {
           this.modalRef.hide();
           this.router.navigate(['dashboard']);
-        },2000);
-        
-        this.modalbody = "Fetching Reminders Failed. Please Try Later";
+        }, 2000);
+
+        this.modalbody = err.error.error;
         this.openModal();
       }
     );
-    
+
     $('.days-select').select2();
     $('.time-select').select2();
 
-    $('.days-select').on('select2:unselecting',(e)=>{
+    $('.days-select').on('select2:unselecting', (e) => {
       let id = e.params.args.data.id;
-      this.reminderSettings.daysselected = this.reminderSettings.daysselected.filter((obj)=>obj.id!=id);
+      this.reminderSettings.daysselected =
+        this.reminderSettings.daysselected.filter((obj) => obj.id != id);
     });
 
-    
-    $('.days-select').on('select2:selecting',(e)=>{
+    $('.days-select').on('select2:selecting', (e) => {
       this.reminderSettings.daysselected.push(e.params.args.data);
     });
 
-    $('.time-select').on('select2:unselecting',(e)=>{
+    $('.time-select').on('select2:unselecting', (e) => {
       let id = e.params.args.data.id;
-      this.reminderSettings.timeselected = this.reminderSettings.timeselected.filter((obj)=>obj.id!=id);
+      this.reminderSettings.timeselected =
+        this.reminderSettings.timeselected.filter((obj) => obj.id != id);
     });
 
-    $('.time-select').on('select2:selecting',(e)=>{
+    $('.time-select').on('select2:selecting', (e) => {
       this.reminderSettings.timeselected.push(e.params.args.data);
     });
   }
 
-  deleteAlert(reminder: any){
+  deleteAlert(reminder: any) {
     this.closeSecondModal();
     this.isLoading$ = true;
-    this.reminderService.postDeleteAllReminders(reminder.title,localStorage.getItem('email'),localStorage.getItem('password')).
-      subscribe(
-        result => {
-          this.isLoading$ = false;
-          window.location.reload();
-        },error => {
-          this.isLoading$ = false;
-          window.location.reload();
-        }
-      );
+    this.reminderService.postDeleteAllReminders(reminder.title).subscribe(
+      (result) => {
+        this.isLoading$ = false;
+        window.location.reload();
+      },
+      (error) => {
+        this.isLoading$ = false;
+        window.location.reload();
+      }
+    );
   }
 
-  completeAlert(reminder: any){
+  completeAlert(reminder: any) {
     this.isLoading$ = true;
-    this.reminderService.postDeleteOneReminder(reminder._id,localStorage.getItem('email'),localStorage.getItem('password')).
-      subscribe(
-        result => {
-          this.isLoading$ = false;
-          window.location.reload();
-        },error => {
-          false;
-          window.location.reload();
-        }
-      );
+    this.reminderService.postDeleteOneReminder(reminder._id).subscribe(
+      (result) => {
+        this.isLoading$ = false;
+        window.location.reload();
+      },
+      (error) => {
+        false;
+        window.location.reload();
+      }
+    );
   }
 
   changePassedReminder(reminder: any) {
@@ -150,23 +150,21 @@ export class CompleteReminderComponent implements OnInit {
     this.openSecondModal();
   }
 
-  addDate(date: string){
+  addDate(date: string) {
     var today: any = new Date();
     var dd: any = today.getDate();
 
-    var mm: any = today.getMonth()+1; 
+    var mm: any = today.getMonth() + 1;
     var yyyy = today.getFullYear();
-    if(dd<10) 
-    {
-      dd = '0'+dd;
-    } 
+    if (dd < 10) {
+      dd = '0' + dd;
+    }
 
-    if(mm<10) 
-    {
-        mm='0'+mm;
-    } 
-    today = yyyy+'-'+mm+'-'+dd;
-    
+    if (mm < 10) {
+      mm = '0' + mm;
+    }
+    today = yyyy + '-' + mm + '-' + dd;
+
     // if(date<today){
     //   setTimeout(()=>{
     //     this.modalRef.hide();
@@ -175,113 +173,144 @@ export class CompleteReminderComponent implements OnInit {
     //   this.openModal();
     //   return;
     // }
-    
+
     let flag: boolean = true;
-    for(let i=0;i<this.reminderSettings.daysselected.length;i++){
-      if(this.reminderSettings.daysselected[i].text==date){
+    for (let i = 0; i < this.reminderSettings.daysselected.length; i++) {
+      if (this.reminderSettings.daysselected[i].text == date) {
         flag = false;
         break;
       }
     }
-    
-    if(flag){
-      this.reminderSettings.daysselected.push({id: this.counterdays, text: date});
+
+    if (flag) {
+      this.reminderSettings.daysselected.push({
+        id: this.counterdays,
+        text: date,
+      });
       this.counterdays += 1;
     }
-    $('.days-select').empty().select2({data: this.reminderSettings.daysselected}).val(this.reminderSettings.daysselected.map((obj)=>obj.id)).change();
+    $('.days-select')
+      .empty()
+      .select2({ data: this.reminderSettings.daysselected })
+      .val(this.reminderSettings.daysselected.map((obj) => obj.id))
+      .change();
   }
 
-  addTime(time: string){
-
+  addTime(time: string) {
     let flag: boolean = true;
-    for(let i=0;i<this.reminderSettings.timeselected.length;i++){
-      if(this.reminderSettings.timeselected[i].text==time){
+    for (let i = 0; i < this.reminderSettings.timeselected.length; i++) {
+      if (this.reminderSettings.timeselected[i].text == time) {
         flag = false;
         break;
       }
     }
-    
-    if(flag){
-      this.reminderSettings.timeselected.push({id: this.countertime, text: time});
+
+    if (flag) {
+      this.reminderSettings.timeselected.push({
+        id: this.countertime,
+        text: time,
+      });
       this.countertime += 1;
     }
-    $('.time-select').empty().select2({data: this.reminderSettings.timeselected}).val(this.reminderSettings.timeselected.map((obj)=>obj.id)).change();
+    $('.time-select')
+      .empty()
+      .select2({ data: this.reminderSettings.timeselected })
+      .val(this.reminderSettings.timeselected.map((obj) => obj.id))
+      .change();
   }
 
-  onAddRemainder(){
+  onAddRemainder() {
     clearTimeout();
 
-    if(this.reminderSettings.timegap=='')
+    if (this.reminderSettings.timegap == '')
       this.reminderSettings.timegap = undefined;
 
-    this.isTitleValid = this.isTitleValid=== undefined ? false : this.isTitleValid;
-    this.isDaysValid = this.isDaysValid=== undefined ? false : this.isDaysValid;
-    this.isCustomDaysValid = this.isCustomDaysValid=== undefined ? false : this.isCustomDaysValid;
-    this.isTimeValid = this.isTimeValid=== undefined ? false : this.isTimeValid;
-    this.isCustomTimeValid = this.isCustomTimeValid=== undefined ? false : this.isCustomTimeValid;
-  
-    if(this.reminderSettings.title && this.reminderSettings.title.length>0)
-      this.isTitleValid = true;
-    else
-      this.isTitleValid = false;
+    this.isTitleValid =
+      this.isTitleValid === undefined ? false : this.isTitleValid;
+    this.isDaysValid =
+      this.isDaysValid === undefined ? false : this.isDaysValid;
+    this.isCustomDaysValid =
+      this.isCustomDaysValid === undefined ? false : this.isCustomDaysValid;
+    this.isTimeValid =
+      this.isTimeValid === undefined ? false : this.isTimeValid;
+    this.isCustomTimeValid =
+      this.isCustomTimeValid === undefined ? false : this.isCustomTimeValid;
 
-    if((this.reminderSettings.daysgap>=0 && this.reminderSettings.daysselected.length==0) || (this.reminderSettings.daysgap==undefined && this.reminderSettings.daysselected.length>0)){
+    if (this.reminderSettings.title && this.reminderSettings.title.length > 0)
+      this.isTitleValid = true;
+    else this.isTitleValid = false;
+
+    if (
+      (this.reminderSettings.daysgap >= 0 &&
+        this.reminderSettings.daysselected.length == 0) ||
+      (this.reminderSettings.daysgap == undefined &&
+        this.reminderSettings.daysselected.length > 0)
+    ) {
       this.isDaysValid = true;
-      this.isCustomDaysValid = true;  
-    }else{
+      this.isCustomDaysValid = true;
+    } else {
       this.isDaysValid = false;
       this.isCustomDaysValid = false;
-    }  
+    }
 
-    if((this.reminderSettings.timegap && this.reminderSettings.timeselected.length == 0) || (!this.reminderSettings.timegap && this.reminderSettings.timeselected.length>0)){
+    if (
+      (this.reminderSettings.timegap &&
+        this.reminderSettings.timeselected.length == 0) ||
+      (!this.reminderSettings.timegap &&
+        this.reminderSettings.timeselected.length > 0)
+    ) {
       this.isTimeValid = true;
-      this.isCustomTimeValid = true;  
-    }else{
+      this.isCustomTimeValid = true;
+    } else {
       this.isTimeValid = false;
       this.isCustomTimeValid = false;
     }
 
-    if(this.isTitleValid && this.isDaysValid && this.isCustomDaysValid && this.isTimeValid && this.isCustomTimeValid){
+    if (
+      this.isTitleValid &&
+      this.isDaysValid &&
+      this.isCustomDaysValid &&
+      this.isTimeValid &&
+      this.isCustomTimeValid
+    ) {
       this.isLoading$ = true;
-      this.reminderService.postAddReminder(this.reminderSettings,localStorage.getItem('email'),localStorage.getItem('password')).subscribe(
-        result => {
+      this.reminderService.postAddReminder(this.reminderSettings).subscribe(
+        (result) => {
           this.isLoading$ = false;
-          setTimeout(()=>{
+          setTimeout(() => {
             this.modalRef.hide();
             window.location.reload();
-          },2000);
-          
-          this.modalbody = "Added Reminder Successfully.";
+          }, 2000);
+
+          this.modalbody = 'Added Reminder Successfully.';
           this.openModal();
         },
-        error => {
+        (err) => {
           this.isLoading$ = false;
-          setTimeout(()=>{
+          setTimeout(() => {
             this.modalRef.hide();
             window.location.reload();
-          },2000);
-          
-          this.modalbody = "Adding Reminder Failed";
+          }, 2000);
+
+          this.modalbody = err.error.error;
           this.openModal();
         }
       );
-    }
-    else{
-      setTimeout(()=>{
+    } else {
+      setTimeout(() => {
         this.modalRef.hide();
-      },3000)
+      }, 3000);
 
-      this.modalbody = "Please correct the errors or fill the required fields.";
+      this.modalbody = 'Please correct the errors or fill the required fields.';
       this.openModal();
     }
   }
 
-  
-  openSecondModal(){
+  openSecondModal() {
     this.modalRef2 = this.modalService.show(this.template2);
   }
 
-  closeSecondModal(){
+  closeSecondModal() {
     this.modalRef2.hide();
   }
 }

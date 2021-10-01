@@ -65,7 +65,9 @@ export class SummaryComponent implements OnInit {
         });
         this.getAllItems();
       },
-      (err) => {}
+      (err) => {
+        this.subloadingService.updateLoadingSummary('false');
+      }
     );
   }
 
@@ -122,7 +124,9 @@ export class SummaryComponent implements OnInit {
         }
         this.yAxisLabel = 'Stock Count for All Items';
       },
-      (err) => {}
+      (err) => {
+        this.subloadingService.updateLoadingSummary('false');
+      }
     );
   }
 }

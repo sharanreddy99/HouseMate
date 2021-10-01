@@ -69,7 +69,11 @@ export class SigninComponent implements OnInit {
         },
         (err) => {
           this.userService.updateLoading('false');
-          localStorage.removeItem('access_token');
+          let currentUser = localStorage.getItem('currentUser');
+          let rememberme = localStorage.getItem('rememberme');
+          localStorage.clear();
+          localStorage.setItem('currentUser', currentUser);
+          localStorage.setItem('rememberme', rememberme);
           if (localStorage.getItem('rememberme') == 'true') {
             this.fillSigninFields();
           }

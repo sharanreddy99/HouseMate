@@ -111,7 +111,6 @@ export class CompleteSummaryComponent implements OnInit {
             },
             (error) => {
               this.isLoading$ = false;
-              this.router.navigate(['dashboard']);
             }
           );
       }
@@ -173,7 +172,6 @@ export class CompleteSummaryComponent implements OnInit {
       },
       (error) => {
         this.isLoading$ = false;
-        this.router.navigate(['dashboard']);
       }
     );
   }

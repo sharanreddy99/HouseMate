@@ -197,7 +197,6 @@ export class CompleteStockEstimatorComponent implements OnInit {
         },
         (error) => {
           this.isLoading$ = false;
-          window.location.reload();
         }
       );
   }
