@@ -3,14 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {
-    "migrate": "cd node_modules/npm-atom/db && npx migrate-mongo up && cd ../../../",
-    "migrate_housemate": "cd src/db && npx migrate-mongo up && cd ../../",
-    "rollback": "cd node_modules/npm-atom/db && npx migrate-mongo down && cd ../../../",
-    "rollback_housemate": "cd src/db && npx migrate-mongo down && cd ../../",
-    "setenv_windows": "(for /F \"tokens=*\" %i in (.env) do set %i)",
-    "setenv_linux": "export $(cat .env | xargs)"
-  },
+  "scripts": {},
   "author": "",
   "license": "ISC",
   "dependencies": {
@@ -18,18 +11,15 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "cron": "^1.8.2",
-    "cross-env": "^7.0.3",
     "crypto-random-string": "^3.2.0",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "handlebars": "^4.7.6",
     "jsonwebtoken": "^8.5.1",
     "migrate-mongo": "^8.2.3",
     "moment": "^2.27.0",
     "mongoose": "^5.9.20",
     "multer": "^1.4.2",
     "nodemailer": "^6.4.10",
-    "nodemon": "^2.0.7",
-    "npm-atom": "^0.0.15"
+    "npm-atom": "^1.1.0"
   }
 }

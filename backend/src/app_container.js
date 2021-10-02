@@ -1,6 +1,7 @@
 // Third Party Packages
 const express = require("express");
 const cors = require("cors");
+const path = require("path");
 
 // Global Setup
 require("dotenv").config();
@@ -15,15 +16,21 @@ const itemRouter = require("./routers/items");
 const reminderRouter = require("./routers/reminder");
 
 // Setup
+const ProjectURL = path.join(__dirname, "Housemates");
 const app = express();
 
 app.use(cors());
 app.use(express.json());
+app.use(express.static(ProjectURL));
 
 app.use(middleware.InitAPILoggerMiddleware);
 app.use("/api/auth", defaultAuthRouter);
 app.use("/api/email", defaultEmailRouter);
 app.use("/api/items", itemRouter);
 app.use("/api/reminders", reminderRouter);
+
+app.get("*", function (req, res) {
+  res.sendFile(path.join(ProjectURL + "/index.html"));
+});
 
 module.exports = app;

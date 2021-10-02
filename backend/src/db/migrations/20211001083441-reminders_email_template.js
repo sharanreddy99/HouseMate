@@ -35,7 +35,7 @@ module.exports = {
             </html>`,
       textbody: null,
       placeholders: ["REMINDERS_LIST"],
-      row_status: 1,
+      row_status: 0,
     });
   },
 
