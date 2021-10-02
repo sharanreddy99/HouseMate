@@ -92,4 +92,4 @@ else
     sed -i "s|HOUSEMATE_BACKEND_FILE_NAME|./app|g" index.js
     cd ..
 fi
-nodemon src/index.js
+npm run start
