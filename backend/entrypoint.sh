@@ -2,11 +2,13 @@
 
 
 # update env vars from .env file
-echo -e "\nUpdating the env variables in current environment:\n"
-echo -e   "--------------------------------------------------\n\n"
-eval $(cat ../.env | sed '/^#/ d' | sed '/^\s*$/d' | sed 's/^/export /')
-echo -e "Successful\n"
-
+if test -f "../.env"; 
+then
+    echo -e "\nUpdating the env variables in current environment:\n"
+    echo -e   "--------------------------------------------------\n\n"
+    eval $(cat ../.env | sed '/^#/ d' | sed '/^\s*$/d' | sed 's/^/export /')
+    echo -e "Successful\n"
+fi
 
 
 
