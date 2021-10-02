@@ -155,7 +155,7 @@ table.dataTable tbody tr:hover {
   background-color: #eef5da !important;
 }
 
-select {
+table.dataTable select {
   background-color: #05386b !important;
   color: white !important;
 }
