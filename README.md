@@ -64,3 +64,6 @@ We have two types of .env files
 
 ## FAQ
 1) If the backend app failed because of any incorrect env vars, delete the npm-atom module from node_modules and reinstall it using `npm i npm-atom@latest` as we will be modifying some of the constants in npm-atom to work correctly with this project.
+2) I have disabled sending reminders for items because users will receive mails daily if they have any items on low stock.. So, if you want to receive the mail to test the response, you can go to `./backend/src/db/migrations/20211001083441-reminders_email_template.js` and set the row_status to 1.
+      > If you are running using docker delete all existing container of housemate and build new image and create container from it.
+      > If you are running without docker and if you have already run earlier. Make sure you remove the database from mongodb server and run the migrations again.
