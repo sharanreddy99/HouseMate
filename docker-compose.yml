@@ -36,6 +36,8 @@ services:
   node:
     volumes:
       - frontend-content:/app/backend/src
+      - /app/backend/node_modules
+      - /app/backend/logs
     container_name: housemate_backend
     build:
       context: ./backend
