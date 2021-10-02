@@ -9,16 +9,18 @@ An application which keeps tracks of the inventory of a user and informs the use
 - The user can also check the details of the items they need to purchase to refill their inventory
 - The user can also add other reminders which will be notified accordingly.
 
-### Technologies Used
+## Technologies Used
 
 - **MEAN Stack**
 - **Docker**
 
-## Installation
+## Environment Variable Files
+We have two types of .env files
+   > .env - use this file if you want to run the application using docker.  
+   > 
+   > local.env - use this file if you want to run the application without docker.
 
-#### Docker and Docker-Compose
-
-1. Create an `.env` file with the following values at the root directory. Fields marked with `!!!` shouldn't be changed
+      NOTE: If you need to change any env vars, then replace the value at all other required places in the env file. 
 
    | Variable Name                   | Description                                                                          | Example                                                                                                   |
    | ------------------------------- | ------------------------------------------------------------------------------------ | --------------------------------------------------------------------------------------------------------- |
@@ -34,10 +36,31 @@ An application which keeps tracks of the inventory of a user and informs the use
    | **HOUSEMATE_REFRESH_TOKEN**     | Refresh Token obtained by registering our application with OAuth-2.0                 | `1//0468tLAM6E5GhCgYIARAAGAQSNwF-L9IrlF57TcXksoDoPpynebZTtoHqRG8QB7FtCzr2sJCfaX-UYb2TQTBCJc7wc74pcfTwOjk` |
    | **HOUSEMATE_PORT**              | The port at which you want the node server to run                                    | `4201`                                                                                                    |
    | **HOUSEMATE_MONGO_FE_PORT**     | for accessing the mongodb database using GUI                                         | `8085`                                                                                                    |
-   | **HOUSEMATE_FRONTNED_BASEURL**  | for accessing the apis from frontend                                                 | `/api` !!!                                                                                                |
+   | **HOUSEMATE_FRONTEND_BASEURL**  | for accessing the apis from frontend                                                 | `/api` !!!                                                                                                |
 
-2. run `docker-compose up`
 
-3. Access the different services of the application using the following urls. The port numbers are usd from the deafult env vars specified above.
+## Installation
+
+### Docker and Docker-Compose
+
+1. run `docker-compose up`
+
+2. Access the different services of the application using the following urls. The port numbers are used from the default env vars specified above.
    > app: http://localhost:4201/
    > mongo_gui: http://localhost:8085/
+
+### Without Docker
+1. delete the .env file and rename local.env to .env
+2. start the mongodb server.
+3. go to `./backend` folder and run `bash entrypoint.sh`
+4. go to `./frontend` folder and run `bash entrypoint.sh`
+
+
+## Default Credentials
+   > email: sharan.personal.projects@gmail.com
+   > 
+   > password: Sharan@99
+
+
+## FAQ
+1) If the backend app failed because of any incorrect env vars, delete the npm-atom module from node_modules and reinstall it using `npm i npm-atom@latest` as we will be modifying some of the constants in npm-atom to work correctly with this project.
