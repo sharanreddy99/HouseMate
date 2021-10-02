@@ -2,47 +2,57 @@ version: "3.9"
 volumes:
   frontend-content:
 services:
-    mongo:
-      container_name: housemate_db
-      image: mongo
-      environment:
-        MONGO_INITDB_DATABASE: ${HOUSEMATE_MONGO_DATABASE}
-      ports:
-        - 27017:27017
+  mongo:
+    container_name: housemate_db
+    image: mongo
+    environment:
+      MONGO_INITDB_DATABASE: ${HOUSEMATE_DATABASE_NAME}
+    ports:
+      - 27017:27017
 
-    mongo-express:
-      container_name: housemate_db_fe
-      image: mongo-express
-      ports:
-        - ${HOUSEMATE_MONGO_FE_PORT}:8081
-      depends_on:
-        - mongo
+  mongo-express:
+    container_name: housemate_db_fe
+    image: mongo-express
+    ports:
+      - ${HOUSEMATE_MONGO_FE_PORT}:8081
+    depends_on:
+      - mongo
 
-    angular:
-      volumes:
-        - frontend-content:/app/frontend/dist/
-      container_name: housemate_frontend
-      build: 
-        context: ./frontend
-        
-    node:
-      volumes:
-        - frontend-content:/app/backend/src
-        
-      container_name: housemate_backend
-      build: 
-        context: ./backend
-      ports:
-        - ${HOUSEMATE_NODE_PORT}:${HOUSEMATE_NODE_PORT}
-      depends_on:
-        - mongo-express
-        - angular
-      environment:
-        HOUSEMATE_NODE_PORT: ${HOUSEMATE_NODE_PORT}
-        HOUSEMATE_NODE_EMAIL: ${HOUSEMATE_NODE_EMAIL}
-        HOUSEMATE_NODE_PASSWORD: ${HOUSEMATE_NODE_PASSWORD}
-        HOUSEMATE_NODE_SECRETJWT: ${HOUSEMATE_NODE_SECRETJWT}
-        HOUSEMATE_NODE_MONGOURL: mongodb://mongo:27017/${HOUSEMATE_MONGO_DATABASE}
-        HOUSEMATE_NODE_CLIENT_ID: ${HOUSEMATE_NODE_CLIENT_ID}
-        HOUSEMATE_NODE_CLIENT_SECRET: ${HOUSEMATE_NODE_CLIENT_SECRET}
-        HOUSEMATE_NODE_REFRESH_TOKEN: ${HOUSEMATE_NODE_REFRESH_TOKEN}
+  redis:
+    container_name: housemate_redis
+    image: redis
+    ports:
+      - ${HOUSEMATE_REDIS_PORT}:6379
+
+  angular:
+    volumes:
+      - frontend-content:/app/frontend/dist/
+    environment: HOUSEMATE_FRONTEND_BASEURL:${HOUSEMATE_FRONTEND_BASEURL}
+    container_name: housemate_frontend
+    build:
+      context: ./frontend
+
+  node:
+    volumes:
+      - frontend-content:/app/backend/src
+    container_name: housemate_backend
+    build:
+      context: ./backend
+    ports:
+      - ${HOUSEMATE_PORT}:${HOUSEMATE_PORT}
+    environment:
+      HOUSEMATE_CRYPTO_PASSPHRASE: ${HOUSEMATE_CRYPTO_PASSPHRASE}
+      HOUSEMATE_DATABASE_URL: ${HOUSEMATE_DATABASE_URL}
+      HOUSEMATE_DATABASE_NAME: ${HOUSEMATE_DATABASE_NAME}
+      HOUSEMATE_APP_NAME: ${HOUSEMATE_APP_NAME}
+      HOUSEMATE_REDIS_HOST: ${HOUSEMATE_REDIS_HOST}
+      HOUSEMATE_REDIS_PORT: ${HOUSEMATE_REDIS_PORT}
+      HOUSEMATE_EMAIL: ${HOUSEMATE_EMAIL}
+      HOUSEMATE_CLIENT_ID: ${HOUSEMATE_CLIENT_ID}
+      HOUSEMATE_CLIENT_SECRET: ${HOUSEMATE_CLIENT_SECRET}
+      HOUSEMATE_REFRESH_TOKEN: ${HOUSEMATE_REFRESH_TOKEN}
+      HOUSEMATE_PORT: ${HOUSEMATE_PORT}
+    depends_on:
+      - mongo-express
+      - angular
+      - redis
