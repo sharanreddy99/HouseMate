@@ -4,4 +4,4 @@ WORKDIR /app/frontend
 COPY package.* .
 RUN npm install
 COPY . /app/frontend/
-CMD ["bash","entrypoint.sh","prod"]
+CMD ["sh","entrypoint.sh","prod"]

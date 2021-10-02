@@ -2,11 +2,9 @@
 
 const config = {
   mongodb: {
-    // TODO Change (or review) the url to your MongoDB:
-    url: "mongodb://localhost:27017",
+    url: "HOUSEMATE_DATABASE_URL",
 
-    // TODO Change this to your database name:
-    databaseName: "housematedb",
+    databaseName: "HOUSEMATE_DATABASE_NAME",
 
     options: {
       useNewUrlParser: true, // removes a deprecation warning when connecting

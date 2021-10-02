@@ -3,5 +3,5 @@ WORKDIR /app/backend
 COPY package.* ./
 RUN npm install
 COPY . /app/backend/ 
-WORKDIR /app/backend/src
-CMD ["bash","entrypoint.sh","prod"]
+WORKDIR /app/backend
+CMD ["sh","entrypoint.sh","prod"]

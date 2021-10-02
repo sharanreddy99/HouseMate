@@ -27,7 +27,8 @@ services:
   angular:
     volumes:
       - frontend-content:/app/frontend/dist/
-    environment: HOUSEMATE_FRONTEND_BASEURL:${HOUSEMATE_FRONTEND_BASEURL}
+    environment: 
+      HOUSEMATE_FRONTEND_BASEURL: ${HOUSEMATE_FRONTEND_BASEURL}
     container_name: housemate_frontend
     build:
       context: ./frontend
