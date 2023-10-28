@@ -29,9 +29,7 @@ echo -e "Successful\n"
 # run migrations of npm-atom
 echo -e "\nRun migrations of npm-atom\n"
 echo -e   "--------------------------\n\n"
-cd node_modules/npm-atom/db
-npx migrate-mongo up
-cd ../../../
+npx migrate-mongo up -f ./node_modules/npm-atom/db/migrate-mongo-config.js
 echo -e "Successful\n"
 
 
@@ -49,9 +47,7 @@ echo -e "Successful\n"
 # run migrations of housemate
 echo -e "\nRun migrations of housemate\n"
 echo -e   "---------------------------\n\n"
-cd src/db
-npx migrate-mongo up
-cd ../../
+npx migrate-mongo up -f ./src/db/migrate-mongo-config.js
 echo -e "Successful\n"
 
 
@@ -60,24 +56,20 @@ then
 
     echo -e "\nundo migrations of housemate\n"
     echo -e   "----------------------------\n\n"
-    cd src/db
     MIGRATIONS_FILE_COUNT=$(ls migrations | wc -l)
     for i in $(seq 1 $MIGRATIONS_FILE_COUNT);
     do
-        npx migrate-mongo down
+        npx migrate-mongo down -f ./src/db/migrate-mongo-config.js
     done
-    cd ../../
     echo -e "Successful\n"
     
     echo -e "\nundo migrations of npm-atom\n"
     echo -e   "---------------------------\n\n"
-    cd node_modules/npm-atom/db
     MIGRATIONS_FILE_COUNT=$(ls migrations | wc -l)
     for i in $(seq 1 $MIGRATIONS_FILE_COUNT);
     do
-        npx migrate-mongo down
+        npx migrate-mongo down -f ./node_modules/npm-atom/db/migrate-mongo-config.js
     done
-    cd ../../../
     echo -e "Successful\n"
 fi
 
