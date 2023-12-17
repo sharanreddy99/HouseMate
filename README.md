@@ -1,6 +1,6 @@
 # HouseMate
 
-An application which keeps tracks of the inventory of a user and informs the user when the stock of items get low. It also gives an estimation of the items to be purchased on the next visit.
+Track, predict, and streamline your shopping! This app forecasts needed items based on usage patterns, provides precise shopping lists for specified days, visualizes current inventory through charts, and enables scheduled email notifications for seamless planning and reminders.
 
 ## Features
 
